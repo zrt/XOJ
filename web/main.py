@@ -11,8 +11,9 @@ tcelery.setup_nonblocking_producer()
 class MainHandler(BaseHandler):
 
     def get(self):
-        user=self.current_user
-        self.render('index.html',user=user)
+        msg = self.get_argument('msg',None)
+        user = self.current_user
+        self.render('index.html',user=user,msg=msg)
 
 
 if __name__ == '__main__':
