@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Login -XOJ</title></head>
+    <body>
+        <h1>Login</h1>
+        {% if error %}
+            <h2>Error: {{error}}</h2>
+        {% end %}
+        <form method="post" action="">
+            {% raw xsrf_form_html() %}
+            <p>username:<br><input type="text" name="user"></p>
+            <p>password:<br><input type="password" name="password"></b></p>
+            <input type="submit">
+        </form>
+    </body>
+</html>
