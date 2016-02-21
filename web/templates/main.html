@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="XOJ">
+    <meta name="author" content="zrt">
+    <link rel="icon" href="{{static_url('img/favicon.ico')}}">
+
+    <title>{{ page_title }}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{static_url('css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="{{static_url('css/bootstrap-theme.min.css')}}" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{{static_url('css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{static_url('css/theme.css')}}" rel="stylesheet">
+
+    <script src="{{static_url('js/ie-emulation-modes-warning.js')}}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body role="document">
+      <div class="container">
+        {%block header%}
+        <div class="header clearfix">
+            <nav>
+              <ul class="nav nav-pills pull-right">
+                <li role="presentation" {% if page_type=='index' %}class="active"{%end%}><a href="/">首页</a></li>
+                <li role="presentation" {% if page_type=='problem' %}class="active"{%end%}><a href="/problems">题库</a></li>
+                <li role="presentation" {% if page_type=='contest' %}class="active"{%end%}><a href="/contests">比赛</a></li>
+                <li role="presentation" {% if page_type=='status' %}class="active"{%end%}><a href="/status">状态</a></li>
+                <li role="presentation" {% if page_type=='post' %}class="active"{%end%}><a href="/posts">讨论</a></li>
+                <li role="presentation" {% if page_type=='rank' %}class="active"{%end%}><a href="/rank">排名</a></li>
+                <li role="presentation" {% if page_type=='notice' %}class="active"{%end%}><a href="/notice">公告</a></li>
+                {%if current_user %}
+                <li role="presentation" {% if page_type=='user' %}class="active"{%end%}><a href="/user/{{current_user}}">{{current_user}}</a></li>
+                <li role="presentation" {% if page_type=='logout' %}class="active"{%end%}><a href="/logout">注销</a></li>
+                {% else %}
+                <li role="presentation" {% if page_type=='login' %}class="active"{%end%}><a href="/login">登录</a></li>
+                <li role="presentation" {% if page_type=='register' %}class="active"{%end%}><a href="/register">注册</a></li>
+                {% end %}
+              </ul>
+            </nav>
+            <h3 class="text-muted">XOJ</h3>
+        </div>
+        {% end %}
+      </div>
+    </nav>
+    
+    <div class="container theme-showcase" role="main">
+      <!-- show msg -->
+      {% if msg %}
+      <div class="alert alert-info" role="alert">
+        <strong>提示：</strong>
+        {{msg}}
+      </div>
+      {%end%}
+      <div id="content">
+        {% block body %}{% end %}
+      </div>
+      <div class="empty"></div>
+      <div class="page-footer footer">
+        {% block footer %}
+          <p>&copy;2016 <a href="https://github.com/zrt/XOJ">XOJ</a></p>
+        {% end %}
+      </div>
+    </div> <!-- /container -->
+    <script src="{{static_url('js/jquery-2.2.0.min.js')}}"></script>
+    <script src="{{static_url('js/bootstrap.min.js')}}"></script>
+    <script src="{{static_url('js/ie10-viewport-bug-workaround.js')}}"></script>
+  </body>
+</html>

@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html>
-    <head><title>Login -XOJ</title></head>
-    <body>
-        <h1>Login</h1>
-        {% if error %}
-            <h2>Error: {{error}}</h2>
-        {% end %}
-        <form method="post" action="">
-            {% raw xsrf_form_html() %}
-            <p>username:<br><input type="text" name="user"></p>
-            <p>password:<br><input type="password" name="password"></b></p>
-            <input type="submit">
+{% extends 'main.html' %}
+{% block body %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="" method="post">
+            <h2>登录</h2>
+            {% raw xsrf_form_html()%}
+            <input type="text" class="form-control" placeholder="用户名" name="user" required autofocus>
+            <input type="password" class="form-control" placeholder="密码" name="password" required>
+            <input type="submit" class="btn btn-success btn-block" value="登录">
         </form>
-    </body>
-</html>
+    </div>
+</div>
+
+{% end %}

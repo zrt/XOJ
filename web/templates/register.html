@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% block body %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="" method="post">
+            <h2>注册</h2>
+            {% raw xsrf_form_html()%}
+            <input type="text" class="form-control" placeholder="用户名" name="user" required autofocus>
+            <input type="password" class="form-control" placeholder="密码" name="password" required>
+            <input type="password" class="form-control" placeholder="密码" name="password2" required>
+            <input type="text" class="form-control" placeholder="邮箱" name="email" required>
+            <input type="text" class="form-control" placeholder="学校" name="school" required>
+            <input type="text" class="form-control" placeholder="邀请码" name="invitecode" required>
+            <input type="submit" class="btn btn-success btn-block" value="注册">
+        </form>
+    </div>
+</div>
+
+{% end %}

@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head><title>XOJ</title></head>
-    <body>
-        {% if msg %}
-        <h3>{{msg}}</h3>
-        {% end %}
-        <h1>XOJ</h1>
-        <h1>Hello, world!</h1>
-        {% if user %}
-        <h1>Hello, {{user}}!</h1>
-        {% end %}
-    </body>
-</html>
+{% extends 'main.html' %}
+{% block body %}
+    <div class="jumbotron">
+        <h1>XOJ首页</h1>
+        <p>内容规划中..</p>
+    </div>
+
+{% end %}

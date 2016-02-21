@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+{% block body %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="" method="post">
+            <h2>您要注销么？</h2>
+            <br>
+            {% raw xsrf_form_html()%}
+            <input type="submit" class="btn btn-danger btn-block" value="确定注销">
+            <a href="/" class="btn btn-success btn-block">返回首页</a>
+        </form>
+    </div>
+</div>
+
+{% end %}

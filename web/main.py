@@ -12,10 +12,12 @@ class MainHandler(BaseHandler):
 
     def get(self):
         msg = self.get_argument('msg',None)
-        user = self.current_user
-        self.render('index.html',user=user,msg=msg)
+        self.render('index.html',msg=msg,page_title='XOJ',page_type='index')
 
-
+class TestHandler(BaseHandler):
+    def get(self):
+        self.render('test.html',msg=None,page_title='测试页 -XOJ',page_type='test')
+        
 if __name__ == '__main__':
 
     settings={
@@ -31,6 +33,8 @@ if __name__ == '__main__':
         (r'/',MainHandler),
         (r'/login',user_handler.LoginHandler),
         (r'/logout',user_handler.LogoutHandler),
+        (r'/register',user_handler.RegisterHandler),
+        (r'/test',TestHandler),
     ],**settings)
 
     application.listen(5000)

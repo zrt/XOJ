@@ -9,7 +9,11 @@ app = Celery('tasks',backend=backend,broker=broker)
 
 @app.task
 def login(user,password):
-    if user=='233' and password=='233':
+    if user=='zrt' and password=='zrt':
         return 1
     else:
         return 2
+
+@app.task
+def register(user,pw,email,school,invitecode,now):
+    return [1,'success']
