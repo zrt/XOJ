@@ -1,9 +1,10 @@
 from tornado import httpserver,ioloop,web,gen,httpclient
-import user_handler
 import tcelery
 import tasks
 from base_handler import BaseHandler
 from tools import *
+import user_handler
+import problem_handler
 
 tcelery.setup_nonblocking_producer()
 
@@ -35,6 +36,7 @@ if __name__ == '__main__':
         (r'/logout',user_handler.LogoutHandler),
         (r'/register',user_handler.RegisterHandler),
         (r'/test',TestHandler),
+        (r'/problems',problem_handler.ProblemsHandler),
     ],**settings)
 
     application.listen(5000)

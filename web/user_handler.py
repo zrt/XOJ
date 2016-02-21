@@ -21,7 +21,7 @@ class LoginHandler(BaseHandler):
         r = yield gen.Task(tasks.login.apply_async,args=[user,password])
 
         if r.result==1 :
-            self.set_secure_cookie('username',user)
+            self.set_secure_cookie('user',user)
             log('user: %s login'%user)
             jump = self.get_argument('next','/')
             self.redirect_msg(jump,'登录成功')
@@ -40,7 +40,7 @@ class LogoutHandler(BaseHandler):
         msg = self.get_argument('msg',None)
         self.render('logout.html',msg=msg,page_type='logout',page_title='注销 -XOJ')
     def post(self):
-        self.clear_cookie('username')
+        self.clear_cookie('user')
         self.redirect_msg('/','注销成功')
 
 

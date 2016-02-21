@@ -1,0 +1,31 @@
+{% extends 'main.html' %}
+
+{% block body %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>题目</th>
+            <th>通过次数</th>
+            <th>提交次数</th>
+            <th>通过率</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in problems %}
+        <tr>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}}</td>
+            <td>{{row[3]}}</td>
+            <td>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" style="width: {{row[4]}}%"><span class="sr-only">{{row[4]}}%通过</span></div>
+                    <div class="progress-bar progress-bar-warning" style="width: {{100-row[4]}}%"><span class='sr-only'>{{100-row[4]}}%错误</span></div>
+                </div>
+            </td>
+        </tr>
+        {% end %}
+    </tbody>
+</table>
+{% end %}
