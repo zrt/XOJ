@@ -15,9 +15,9 @@
         {% for row in contests %}
         <tr>
             <td>{{row[0]}}</td>
-            <td>{{row[1]}}</td>
+            <td><a href="/contest/{{row[0]}}">{{row[1]}}</a></td>
             <td>{{row[2]}}</td>
-            <td>{{row[3]}}</td>
+            <td><a href="/user/{{row[3]}}">{{row[3]}}</a></td>
             <td>{{row[4]}}</td>
         </tr>
         {% end %}

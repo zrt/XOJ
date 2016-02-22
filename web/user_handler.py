@@ -4,6 +4,7 @@ import tasks
 from datetime import datetime
 from base_handler import BaseHandler
 from tools import *
+import conf
 
 
 class LoginHandler(BaseHandler):
@@ -69,6 +70,19 @@ class RegisterHandler(BaseHandler):
 
 class ShowUserHandler(BaseHandler):
 
+    @gen.coroutine
     def get(self,user):
         msg = self.get_argument('msg',None)
-        self.render('show_user.html',msg=msg,page_type='user',user=user,page_title='用户:'+user+' -XOJ')
+
+        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
+        cur = conn.cursor()
+        sql = "SELECT user,email,school,motto,admin,ac_num,submit_num FROM user WHERE user = %s"
+        yield cur.execute(sql,(user,))
+        user_info=cur.fetchone()
+        cur.close()
+        conn.close()
+        if user_info == None:
+            self.redirect_msg('/','用户名错误')
+            return
+        self.render('show_user.html',msg=msg,page_type='user',user=user_info,page_title='用户:'+user+' -XOJ')

@@ -19,7 +19,7 @@ class RankHandler(BaseHandler):
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
         #visible
-        sql = "SELECT user,school,motto,ac_num,submit_num,email FROM user LIMIT %s,%s"
+        sql = "SELECT user,school,motto,ac_num,submit_num,email FROM user ORDER BY ac_num DESC LIMIT %s,%s"
         yield cur.execute(sql,((page_now-1)*conf.USERS_PER_PAGE,conf.USERS_PER_PAGE))
         users = [[*row,int((row[3]+1)/(row[4]+1)*100)] for row in cur]
         cur.close()

@@ -48,6 +48,11 @@ if __name__ == '__main__':
         (r'/notice',post_handler.NoticeHandler),
         (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})',user_handler.ShowUserHandler),
         (r'/problem/(\d+)',problem_handler.ProblemHandler),
+        (r'/contest/(\d+)',contest_handler.ContestHandler),
+        (r'/status/(\d+)',judge_handler.InfoHandler),
+        (r'/problem/(\d+)/edit/0',problem_handler.EditProblemHandler0),
+        (r'/problem/(\d+)/edit/1',problem_handler.EditProblemHandler1),
+        (r'/problem/(\d+)/edit/2',problem_handler.EditProblemHandler2),
     ],**settings)
 
     application.listen(5000)

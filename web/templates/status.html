@@ -17,42 +17,44 @@
         {% for row in records %}
         <tr>
             <td>{{row[0]}}</td>
-            <td>#{{row[1]}}. {{row[2]}}</td>
-            <td>{{row[3]}}</td>
+            <td><a href="/problem/{{row[1]}}">#{{row[1]}}. {{row[2]}}</a></td>
+            <td><a href="/user/{{row[3]}}">{{row[3]}}</a></td>
             <td>
-                {% if row[4] == 0 or row[4] == None %}
-                <span class="label label-default">非法状态</span>
-                {% end %}
-                {% if row[4] == 1 %}
-                <span class="label label-info">等待评测</span>
-                {% end %}
-                {% if row[4] == 2 %}
-                <span class="label label-primary">评测中</span>
-                {% end %}
-                {% if row[4] == 3 %}
-                <span class="label label-success">通过</span>
-                {% end %}
-                {% if row[4] == 4 %}
-                <span class="label label-danger">答案错误</span>
-                {% end %}
-                {% if row[4] == 5 %}
-                <span class="label label-warning">超时</span>
-                {% end %}
-                {% if row[4] == 6 %}
-                <span class="label label-danger">运行错误</span>
-                {% end %}
-                {% if row[4] == 7 %}
-                <span class="label label-warning">超内存</span>
-                {% end %}
-                {% if row[4] == 8 %}
-                <span class="label label-danger">编译错误</span>
-                {% end %}
-                {% if row[4] == 9 %}
-                <span class="label label-danger">系统错误</span>
-                {% end %}
+                <a href="/status/{{row[0]}}">
+                    {% if row[4] == 0 or row[4] == None %}
+                    <span class="label label-default">非法状态</span>
+                    {% end %}
+                    {% if row[4] == 1 %}
+                    <span class="label label-info">等待评测</span>
+                    {% end %}
+                    {% if row[4] == 2 %}
+                    <span class="label label-primary">评测中</span>
+                    {% end %}
+                    {% if row[4] == 3 %}
+                    <span class="label label-success">通过</span>
+                    {% end %}
+                    {% if row[4] == 4 %}
+                    <span class="label label-danger">答案错误</span>
+                    {% end %}
+                    {% if row[4] == 5 %}
+                    <span class="label label-warning">超时</span>
+                    {% end %}
+                    {% if row[4] == 6 %}
+                    <span class="label label-danger">运行错误</span>
+                    {% end %}
+                    {% if row[4] == 7 %}
+                    <span class="label label-warning">超内存</span>
+                    {% end %}
+                    {% if row[4] == 8 %}
+                    <span class="label label-danger">编译错误</span>
+                    {% end %}
+                    {% if row[4] == 9 %}
+                    <span class="label label-danger">系统错误</span>
+                    {% end %}
+                </a>
             </td>
-            <td>{{row[5]}}ms</td>
-            <td>{{row[6]}}kb</td>
+            <td><a href="/status/{{row[0]}}">{{row[5]}}ms</a></td>
+            <td><a href="/status/{{row[0]}}">{{row[6]}}kb</a></td>
             <td>{{row[7]}}</td>
         </tr>
         {% end %}
