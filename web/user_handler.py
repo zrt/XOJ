@@ -85,4 +85,4 @@ class ShowUserHandler(BaseHandler):
         if user_info == None:
             self.redirect_msg('/','用户名错误')
             return
-        self.render('show_user.html',msg=msg,page_type='user',user=user_info,page_title='用户:'+user+' -XOJ')
+        self.render('show_user.html',msg=msg,page_type='user',user=user_info,get_pic=get_pic,page_title='用户:'+user+' -XOJ')

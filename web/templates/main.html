@@ -44,7 +44,7 @@
                 <li role="presentation" {% if page_type=='user' %}class="active"{%end%}><a href="/rank">用户</a></li>
                 <li role="presentation" {% if page_type=='notice' %}class="active"{%end%}><a href="/notice">公告</a></li>
                 {%if current_user %}
-                <li role="presentation" ><a href="/user/{{current_user}}">{{current_user}}</a></li>
+                <li role="presentation" {% if page_type=='setting' %}class="active"{%end%}><a href="/user/{{current_user}}"><span class="glyphicon glyphicon-user"></span> {{current_user}}</a></li>
                 <li role="presentation" {% if page_type=='logout' %}class="active"{%end%}><a href="/logout">注销</a></li>
                 {% else %}
                 <li role="presentation" {% if page_type=='login' %}class="active"{%end%}><a href="/login">登录</a></li>

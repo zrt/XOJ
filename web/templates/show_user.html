@@ -1,7 +1,105 @@
 {% extends 'main.html' %}
 {% block body %}
-    <div class="jumbotron">
-        <h1>show {{user}}</h1>
+        <h2>用户信息</h2>
+    <div class="row">
+        <div class="col-md-7">
+            <h1>{{user[0]}}</h1>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">邮箱</h3>
+                </div>
+                <div class="panel-body">
+                    {{user[1]}}
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">学校</h3>
+                </div>
+                <div class="panel-body">
+                    {{user[2]}}
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-5">
+            <img class="img-rounded img-thumbnail" src="{{get_pic(user[1],256)}}">
+        </div>
+        
     </div>
-
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">格言</h3>
+                </div>
+                <div class="panel-body">
+                    {{user[3]}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr><td>总提交</td>
+                        <td>100</td></tr>
+                    <tr><td>通过</td>
+                        <td>55</td></tr>
+                    <tr><td>答案错误</td>
+                        <td>15</td></tr>
+                    <tr><td>超时</td>
+                        <td>10</td></tr>
+                    <tr><td>超内存</td>
+                        <td>10</td></tr>
+                    <tr><td>运行错误</td>
+                        <td>7</td></tr>
+                    <tr><td>编译错误</td>
+                        <td>3</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">通过的题目(共{{user[5]}}道)</h3>
+                </div>
+                <div class="panel-body">
+                    1,2,3,4,5
+                </div>
+            </div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" style="width: 55%"></div>
+                <div class="progress-bar progress-bar-danger" style="width: 15%"></div>
+                <div class="progress-bar progress-bar-warning" style="width: 10%"></div>
+                <div class="progress-bar progress-bar-info" style="width: 10%"></div>
+                <div class="progress-bar progress-bar-progress-bar-striped" style="width: 7%"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">最近发布的文章</h3>
+                </div>
+                <div class="panel-body">
+                    1,2,3,4,5
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">最近发布的评论</h3>
+                </div>
+                <div class="panel-body">
+                    1,2,3,4,5
+                </div>
+            </div>
+        </div>
+    </div>
 {% end %}

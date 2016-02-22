@@ -43,6 +43,10 @@ def gen_pages(url,now):
         pages.append([i,add_param(url,'page',i),0])
     return [fanye,pages]
 
+def get_pic(email,siz):
+    url = 'http://cn.gravatar.com/avatar/'+ hashlib.md5(email.lower().encode('utf-8')).hexdigest()+'?'
+    url += urllib.parse.urlencode({'d':'mm','s':str(siz)})
+    return url
 
 @gen.coroutine
 def CREATE_DATABASE_func():
