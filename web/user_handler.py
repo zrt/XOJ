@@ -22,7 +22,7 @@ class LoginHandler(BaseHandler):
 
         if r.result==1 :
             self.set_secure_cookie('user',user)
-            log('user: %s login'%user)
+            log('user: %s login %s'%(user,self.request.remote_ip))
             jump = self.get_argument('next','/')
             self.redirect_msg(jump,'登录成功')
         elif r.result==2 :
@@ -67,3 +67,8 @@ class RegisterHandler(BaseHandler):
             log('register error user: %s r0: %d r1: %s',user,r[0],r[1])
             self.render('register.html',msg='未知错误',page_type='register',page_title='注册 -XOJ')
 
+class ShowUserHandler(BaseHandler):
+
+    def get(self,user):
+        msg = self.get_argument('msg',None)
+        self.render('show_user.html',msg=msg,page_type='user',user=user,page_title='用户:'+user+' -XOJ')

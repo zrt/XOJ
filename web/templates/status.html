@@ -1,0 +1,70 @@
+{% extends 'main.html' %}
+
+{% block body %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>题目名称</th>
+            <th>提交者</th>
+            <th>状态</th>
+            <th>总用时</th>
+            <th>内存</th>
+            <th>提交时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in records %}
+        <tr>
+            <td>{{row[0]}}</td>
+            <td>#{{row[1]}}. {{row[2]}}</td>
+            <td>{{row[3]}}</td>
+            <td>
+                {% if row[4] == 0 or row[4] == None %}
+                <span class="label label-default">非法状态</span>
+                {% end %}
+                {% if row[4] == 1 %}
+                <span class="label label-info">等待评测</span>
+                {% end %}
+                {% if row[4] == 2 %}
+                <span class="label label-primary">评测中</span>
+                {% end %}
+                {% if row[4] == 3 %}
+                <span class="label label-success">通过</span>
+                {% end %}
+                {% if row[4] == 4 %}
+                <span class="label label-danger">答案错误</span>
+                {% end %}
+                {% if row[4] == 5 %}
+                <span class="label label-warning">超时</span>
+                {% end %}
+                {% if row[4] == 6 %}
+                <span class="label label-danger">运行错误</span>
+                {% end %}
+                {% if row[4] == 7 %}
+                <span class="label label-warning">超内存</span>
+                {% end %}
+                {% if row[4] == 8 %}
+                <span class="label label-danger">编译错误</span>
+                {% end %}
+                {% if row[4] == 9 %}
+                <span class="label label-danger">系统错误</span>
+                {% end %}
+            </td>
+            <td>{{row[5]}}ms</td>
+            <td>{{row[6]}}kb</td>
+            <td>{{row[7]}}</td>
+        </tr>
+        {% end %}
+    </tbody>
+</table>
+<div class="center">
+    <ul class="pagination">
+        <li {% if pages[0][0] == 0%} class="disabled"{% end%}><a href="{{pages[0][2]}}">&laquo;</a></li>
+        {% for row in pages[1] %}
+        <li {% if row[2]%} class="active"{% end %}><a href="{{row[1]}}">{{row[0]}}</a></li>
+        {% end %}
+        <li {% if pages[0][1] == 0%} class="disable"{% end%}><a href="{{pages[0][3]}}">&raquo;</a></li>
+    </ul>
+</div>
+{% end %}

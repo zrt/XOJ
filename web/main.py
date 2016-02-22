@@ -5,6 +5,10 @@ from base_handler import BaseHandler
 from tools import *
 import user_handler
 import problem_handler
+import contest_handler
+import judge_handler
+import post_handler
+import rank_handler
 
 tcelery.setup_nonblocking_producer()
 
@@ -37,6 +41,13 @@ if __name__ == '__main__':
         (r'/register',user_handler.RegisterHandler),
         (r'/test',TestHandler),
         (r'/problems',problem_handler.ProblemsHandler),
+        (r'/contests',contest_handler.ContestsHandler),
+        (r'/status',judge_handler.StatusHandler),
+        (r'/posts',post_handler.PostsHandler),
+        (r'/rank',rank_handler.RankHandler),
+        (r'/notice',post_handler.NoticeHandler),
+        (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})',user_handler.ShowUserHandler),
+        (r'/problem/(\d+)',problem_handler.ProblemHandler),
     ],**settings)
 
     application.listen(5000)

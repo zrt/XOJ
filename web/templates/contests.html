@@ -5,25 +5,20 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>题目名称</th>
-            <th>通过次数</th>
-            <th>提交次数</th>
-            <th>通过率</th>
+            <th>比赛名称</th>
+            <th>开始时间</th>
+            <th>举办者</th>
+            <th>介绍</th>
         </tr>
     </thead>
     <tbody>
-        {% for row in problems %}
+        {% for row in contests %}
         <tr>
             <td>{{row[0]}}</td>
             <td>{{row[1]}}</td>
             <td>{{row[2]}}</td>
             <td>{{row[3]}}</td>
-            <td>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-success" style="width: {{row[4]}}%"><span class="sr-only">{{row[4]}}%通过</span></div>
-                    <div class="progress-bar progress-bar-warning" style="width: {{100-row[4]}}%"><span class='sr-only'>{{100-row[4]}}%错误</span></div>
-                </div>
-            </td>
+            <td>{{row[4]}}</td>
         </tr>
         {% end %}
     </tbody>

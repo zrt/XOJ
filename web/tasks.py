@@ -11,7 +11,7 @@ app = Celery('tasks',backend=backend,broker=broker)
 
 'celery -A tasks worker --loglevel=info --pool=solo'
 
-user_rule=r'^[a-zA-Z\_][0-9a-zA-Z\_]{0,19}$'
+user_rule=r'^[a-zA-Z][0-9a-zA-Z\-]{0,19}$'
 email_rule=r'^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$'
 
 def sql_conn():
@@ -48,7 +48,7 @@ def register(user,pw,email,school,invitecode,now):
     isinstance(email,str) and isinstance(school,str) and \
     isinstance(invitecode,str):
         if not re.match(user_rule,user):
-            return [2,r'用户名格式错误([a-zA-Z\_][0-9a-zA-Z\_]{0,19})']
+            return [2,r'用户名格式错误('+user_rule+')']
         if len(pw)<6 :
             return [2,'密码太短']
         if not re.match(email_rule,email):

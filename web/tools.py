@@ -2,6 +2,7 @@ from tornado import ioloop,gen,escape
 from datetime import datetime
 import tornado_mysql
 import hashlib
+import urllib.parse
 
 def log(s):
     print(str(datetime.now())+' - '+s)
@@ -14,7 +15,33 @@ def gen_pw(user,pw):
     m.update((user+'XOJ233333333333333- -.#'+pw).encode('utf-8'))
     return m.hexdigest()
 
+def add_param(url,a,b):
+    params = {a:b}
+    url_parts = list(urllib.parse.urlparse(url))
+    query = dict(url_parts[4])
+    query.update(params)
+    url_parts[4] = urllib.parse.urlencode(query)
+    url = urllib.parse.urlunparse(url_parts)
+    return url
 
+def norm_page(page_now):
+    if page_now < 1:
+        page_now=1
+    if page_now > 10000000:
+        page_now=10000000
+    return page_now
+
+def gen_pages(url,now):
+    fanye=[1,1,add_param(url,'page',now-1),add_param(url,'page',now+1)]
+    if now == 1:
+        fanye[0]=0
+    pages=[]
+    for i in range(max(1,now-3),now):
+        pages.append([i,add_param(url,'page',i),0])
+    pages.append([now,add_param(url,'page',now),1])
+    for i in range(now+1,now+4):
+        pages.append([i,add_param(url,'page',i),0])
+    return [fanye,pages]
 
 
 @gen.coroutine
