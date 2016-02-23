@@ -4,9 +4,11 @@
     <div class="col-md-6 col-md-offset-3">
         <form action="" method="post">
             <h2>登录</h2>
+            <br>
             {% raw xsrf_form_html()%}
             <input type="text" class="form-control" placeholder="用户名" name="user" required autofocus>
             <input type="password" class="form-control" placeholder="密码" name="password" required>
+            <br>
             <input type="submit" class="btn btn-success btn-block" value="登录">
         </form>
     </div>

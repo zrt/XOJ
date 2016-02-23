@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+{% block body %}
+<div class="row">
+        <div class="col-md-9"><h1>提交：#{{problem[0]}}. {{problem[2]}}</h1></div>
+        <div class="btn-group col-md-3">
+            <h1></h1>
+             <button class="btn btn-info" onclick="window.location.href='/problem/{{problem[0]}}'">返回题目页面</button> 
+             <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
+            <ul class="dropdown-menu" >
+                <li>
+                    <a href="/problem/{{problem[0]}}/status">统计</a>
+                </li>
+                <li>
+                    <a href="#post">讨论</a>
+                </li>
+                <li>
+                    <a href="#msg">报错</a>
+                </li>
+                <li class="divider">
+                </li>
+                <li>
+                    <a href="/problem/{{problem[0]}}/edit/0">管理</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br>
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>提交代码</legend>
+            {% raw xsrf_form_html()%}
+            <div class="form-group">
+                <label for="inputLang" class="col-lg-2 control-label">语言</label>
+                <div class="col-lg-10">
+                    <span class="help-block">['Error', 'C++', 'C', 'Python3', 'Python2.7'][ ? ]</span>
+                    <input class="form-control" name="lang" id="inputLang" value="1" disabled="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputCode" class="col-lg-2 control-label">代码</label>
+                <div class="col-lg-10">
+                    <textarea class="form-control" rows="14" id="inputCode" name="code"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="submit" formmethod="post" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+{% end %}

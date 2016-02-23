@@ -106,3 +106,11 @@ body {
 .text-center {
   text-align: center;
 }
+.username{
+  padding-left: 15px;
+  padding-bottom: 7px;
+}
+.markdown p{
+  font-size: 1.2em;
+  text-indent: 2em;
+}

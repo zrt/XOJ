@@ -1,7 +1,132 @@
 {% extends 'main.html' %}
 {% block body %}
-    <div class="jumbotron">
-        <p>show {{problem}}</p>
+    <h1 class="center">管理：#{{problem[0]}}. {{problem[2]}} 评测信息</h1>
+    <br>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" style="width: 55%"></div>
+                <div class="progress-bar progress-bar-danger" style="width: 15%"></div>
+                <div class="progress-bar progress-bar-warning" style="width: 10%"></div>
+                <div class="progress-bar progress-bar-info" style="width: 10%"></div>
+                <div class="progress-bar progress-bar-progress-bar-striped" style="width: 7%"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="btn-group">
+                 <button class="btn btn-info" onclick="window.location.href='/problem/{{problem[0]}}'">查看题目页面</button> 
+                 <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
+                <ul class="dropdown-menu" >
+                    <li>
+                        <a href="/problem/{{problem[0]}}/status">统计</a>
+                    </li>
+                    <li>
+                        <a href="#post">讨论</a>
+                    </li>
+                    <li>
+                        <a href="#msg">报错</a>
+                    </li>
+                    <li class="divider">
+                    </li>
+                    <li >
+                        <a href="/problem/{{problem[0]}}/edit/0">管理题目基本信息</a>
+                    </li>
+                    <li >
+                        <a href="/problem/{{problem[0]}}/edit/1">管理题面描述信息</a>
+                    </li>
+                    <li class="active">
+                        <a href="/problem/{{problem[0]}}/edit/2">管理题目评测信息</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr><td>总提交</td>
+                        <td>100</td></tr>
+                    <tr><td>通过</td>
+                        <td>55</td></tr>
+                    <tr><td>答案错误</td>
+                        <td>15</td></tr>
+                    <tr><td>超时</td>
+                        <td>10</td></tr>
+                    <tr><td>超内存</td>
+                        <td>10</td></tr>
+                    <tr><td>运行错误</td>
+                        <td>7</td></tr>
+                    <tr><td>编译错误</td>
+                        <td>3</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">最近的十次提交</h3>
+                </div>
+                <div class="panel-body">
+                    1,2,3,4,5
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>评测信息</legend>
+            <span class="help-block">注意保存，提交失败有可能丢失</span>
+            {% raw xsrf_form_html()%}
+            <div class="form-group">
+                <label class="col-lg-2 control-label">编辑数据</label>
+                <div class="col-lg-10">
+                    <span class="help-block">未开发</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">数据信息</label>
+                <div class="col-lg-10">
+                    <span class="help-block">请通过上方<strong>编辑数据</strong>操作，不要修改下面框里内容</span>
+                    <textarea class="form-control" rows="6" id="inputData" name="data" >{{problem[3]}}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputSpj" class="col-lg-2 control-label">评分程序Spj（必填）</label>
+                <div class="col-lg-10">
+                    <span class="help-block">请看Spj标准，或使用该公告中提供的基本Spj</span>
+                    <textarea class="form-control" rows="6" id="inputSpj" name="spj_code" >{{problem[7]}}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputStd" class="col-lg-2 control-label">标准程序（选填）</label>
+                <div class="col-lg-10">
+                    <span class="help-block">建议填写</span>
+                    <textarea class="form-control" rows="6" id="inputStd" name="std_code" >{{problem[4]}}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputVal" class="col-lg-2 control-label">数据合法性检验程序（选填）</label>
+                <div class="col-lg-10">
+                    <span class="help-block">请看数据合法性检验程序标准，或使用该公告中提供的基本数据合法性检验程序</span>
+                    <textarea class="form-control" rows="6" id="inputVal" name="val_code" >{{problem[5]}}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputGen" class="col-lg-2 control-label">数据生成器（选填）</label>
+                <div class="col-lg-10">
+                    <span class="help-block">请看数据生成器标准，建议填写</span>
+                    <textarea class="form-control" rows="6" id="inputGen" name="gen_code" >{{problem[6]}}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="reset" class="btn btn-default">重置</button>
+                    <button type="submit" formmethod="post" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
 
 {% end %}

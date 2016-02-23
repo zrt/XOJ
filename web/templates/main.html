@@ -77,7 +77,26 @@
       </div>
     </div> <!-- /container -->
     <script src="{{static_url('js/jquery-2.2.0.min.js')}}"></script>
+    <script src="{{static_url('js/showdown.min.js')}}"></script>
+    <script src="{{static_url('js/zrtmarkdown.js')}}"></script>
     <script src="{{static_url('js/bootstrap.min.js')}}"></script>
     <script src="{{static_url('js/ie10-viewport-bug-workaround.js')}}"></script>
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        showProcessingMessages: false,
+        tex2jax: {
+          inlineMath: [["$", "$"], ["\\\\(", "\\\\)"]],
+          processEscapes:true
+        },
+        menuSettings: {
+          zoom: "Hover"
+          }
+      });
+    </script>
+    <script src="//cdn.bootcss.com/mathjax/2.6.0/MathJax.js?config=TeX-AMS_HTML"></script>
+    <link rel="stylesheet" type="text/css" href="{{static_url('css/highlight.css')}}">
+    <script type="text/javascript" src="{{static_url('js/highlight.pack.js')}}"></script>
+    <script type="text/javascript">$(hljs.initHighlightingOnLoad);</script>
   </body>
 </html>

@@ -53,6 +53,8 @@ if __name__ == '__main__':
         (r'/problem/(\d+)/edit/0',problem_handler.EditProblemHandler0),
         (r'/problem/(\d+)/edit/1',problem_handler.EditProblemHandler1),
         (r'/problem/(\d+)/edit/2',problem_handler.EditProblemHandler2),
+        (r'/problem/(\d+)/submit',problem_handler.SubmitHandler),
+        (r'/problem/new',problem_handler.NewProblemHandler),
     ],**settings)
 
     application.listen(5000)

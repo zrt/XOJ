@@ -1,7 +1,118 @@
 {% extends 'main.html' %}
 {% block body %}
-    <div class="jumbotron">
-        <p>show {{info}}</p>
+    <div class="row">
+        <div class="col-md-7"><h1>评测记录 #{{info[0]}}</h1></div>
+        <div class="btn-group col-md-5">
+            <h1></h1>
+             <button class="btn btn-info" onclick="window.location.href='/problem/{{info[3]}}'">返回题目页面</button> 
+             <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
+            <ul class="dropdown-menu" >
+                <li>
+                    <a href="/problem/{{info[3]}}/submit">提交页面</a>
+                </li>
+                <li>
+                    <a href="/problem/{{info[3]}}/status">统计</a>
+                </li>
+                <li>
+                    <a href="#post">讨论</a>
+                </li>
+                <li>
+                    <a href="#msg">报错</a>
+                </li>
+                <li class="divider">
+                <li>
+                    <a href="#public">公开此份代码</a>
+                </li>
+                <li>
+                    <a href="#unpublic">不公开此份代码</a>
+                </li>
+                <li class="divider">
+                </li>
+                <li>
+                    <a href="/problem/{{info[3]}}/edit/0">管理</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>题目</th>
+                        <th>提交者</th>
+                        <th>评测结果</th>
+                        <th>提交时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#{{info[3]}}. {{info[4]}}</td>
+                        <td>{{info[1]}}</td>
+                        <td>
+                            {% if info[5] == 0 or info[5] == None %}
+                            <span class="label label-default">非法状态</span>
+                            {% end %}
+                            {% if info[5] == 1 %}
+                            <span class="label label-info">等待评测</span>
+                            {% end %}
+                            {% if info[5] == 2 %}
+                            <span class="label label-primary">评测中</span>
+                            {% end %}
+                            {% if info[5] == 3 %}
+                            <span class="label label-success">通过</span>
+                            {% end %}
+                            {% if info[5] == 4 %}
+                            <span class="label label-danger">答案错误</span>
+                            {% end %}
+                            {% if info[5] == 5 %}
+                            <span class="label label-warning">超时</span>
+                            {% end %}
+                            {% if info[5] == 6 %}
+                            <span class="label label-danger">运行错误</span>
+                            {% end %}
+                            {% if info[5] == 7 %}
+                            <span class="label label-warning">超内存</span>
+                            {% end %}
+                            {% if info[5] == 8 %}
+                            <span class="label label-danger">编译错误</span>
+                            {% end %}
+                            {% if info[5] == 9 %}
+                            <span class="label label-danger">系统错误</span>
+                            {% end %}
+                        </td>
+                        <td>{{info[10]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>语言</th>
+                        <th>代码长度</th>
+                        <th>时间使用</th>
+                        <th>内存使用</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ ['Error','C++','C','Python3','Python2.7'][info[8]] }}</td>
+                        <td>{{info[9]}}</td>
+                        <td>{{info[7]}}ms</td>
+                        <td>{{info[6]}}kb</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <pre><code>{{info[2]}}</code></pre>
+            <br>
+            <div class="markdown">
+                {{info[11]}}
+            </div>
+        </div>
     </div>
 
 {% end %}

@@ -57,6 +57,38 @@ class ProblemHandler(BaseHandler):
 
 class EditProblemHandler0(BaseHandler):
     
+    @gen.coroutine
+    def post(self,prob_id):
+        prob_id=int(prob_id)
+        if prob_id < 1 :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        prob_id=norm_page(prob_id)
+        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
+        cur = conn.cursor()
+        sql = "SELECT id FROM problems WHERE id = %s"
+        yield cur.execute(sql,(prob_id,))
+        problem = cur.fetchone()
+        if problem == None :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        p=[self.get_argument(s) for s in ['tp','name','tim_limit','mem_limit','author','visible'] ]
+        sql = "UPDATE problems SET tp = %s,name = %s,tim_limit = %s,mem_limit = %s,author = %s,visible = %s WHERE id = %s"
+
+        try:
+            yield cur.execute(sql,(*p,prob_id))
+            yield conn.commit()
+        except BaseException as e:
+            self.redirect_msg('/problem/%d/edit/0'%prob_id,'修改失败，数据库错误')
+            raise
+        else:
+            self.redirect_msg('/problem/%d/edit/0'%prob_id,'修改成功')
+        finally:
+            cur.close()
+            conn.close()
+
+
     #管理，提供信息
     @gen.coroutine
     def get(self,prob_id):
@@ -70,7 +102,7 @@ class EditProblemHandler0(BaseHandler):
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
         #
-        sql = "SELECT id,tp,name,tim_limit,mem_limit,author,visible,ac_num,submit_num,gen_date FROM problems WHERE id = %s"
+        sql = "SELECT id,tp,name,tim_limit,mem_limit,author,visible,gen_date FROM problems WHERE id = %s"
         yield cur.execute(sql,(prob_id,))
         problem = cur.fetchone()
         cur.close()
@@ -79,9 +111,40 @@ class EditProblemHandler0(BaseHandler):
             self.redirect_msg('/problems','题目编号错误')
             return
         self.render('edit_problem_0.html',msg=msg,problem=problem,page_type='problem',\
-            page_title='编辑#'+str(problem[0])+'. '+problem[2]+' -XOJ')
+            page_title='管理#'+str(problem[0])+'. '+problem[2]+' -XOJ')
 
 class EditProblemHandler1(BaseHandler):
+
+    @gen.coroutine
+    def post(self,prob_id):
+        prob_id=int(prob_id)
+        if prob_id < 1 :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        prob_id=norm_page(prob_id)
+        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
+        cur = conn.cursor()
+        sql = "SELECT id FROM problems WHERE id = %s"
+        yield cur.execute(sql,(prob_id,))
+        problem = cur.fetchone()
+        if problem == None :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        p=[self.get_argument(s) for s in ['content','images'] ]
+        sql = "UPDATE problems SET content = %s,images = %s WHERE id = %s"
+
+        try:
+            yield cur.execute(sql,(*p,prob_id))
+            yield conn.commit()
+        except BaseException as e:
+            self.redirect_msg('/problem/%d/edit/1'%prob_id,'修改失败，数据库错误')
+            raise
+        else:
+            self.redirect_msg('/problem/%d/edit/1'%prob_id,'修改成功')
+        finally:
+            cur.close()
+            conn.close()
 
     #编辑题目内容
     @gen.coroutine
@@ -105,9 +168,40 @@ class EditProblemHandler1(BaseHandler):
             self.redirect_msg('/problems','题目编号错误')
             return
         self.render('edit_problem_1.html',msg=msg,problem=problem,page_type='problem',\
-            page_title='编辑#'+str(problem[0])+'. '+problem[2]+' -XOJ')
+            page_title='管理#'+str(problem[0])+'. '+problem[2]+' -XOJ')
 
 class EditProblemHandler2(BaseHandler):
+
+    @gen.coroutine
+    def post(self,prob_id):
+        prob_id=int(prob_id)
+        if prob_id < 1 :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        prob_id=norm_page(prob_id)
+        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
+        cur = conn.cursor()
+        sql = "SELECT id FROM problems WHERE id = %s"
+        yield cur.execute(sql,(prob_id,))
+        problem = cur.fetchone()
+        if problem == None :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        p=[self.get_argument(s) for s in ['data','std_code','val_code','gen_code','spj_code'] ]
+        sql = "UPDATE problems SET data = %s,std_code = %s,val_code = %s,gen_code = %s,spj_code = %s WHERE id = %s"
+
+        try:
+            yield cur.execute(sql,(*p,prob_id))
+            yield conn.commit()
+        except BaseException as e:
+            self.redirect_msg('/problem/%d/edit/2'%prob_id,'修改失败，数据库错误')
+            raise
+        else:
+            self.redirect_msg('/problem/%d/edit/2'%prob_id,'修改成功')
+        finally:
+            cur.close()
+            conn.close()
 
     #编辑评测内容
     @gen.coroutine
@@ -131,4 +225,62 @@ class EditProblemHandler2(BaseHandler):
             self.redirect_msg('/problems','题目编号错误')
             return
         self.render('edit_problem_2.html',msg=msg,problem=problem,page_type='problem',\
-            page_title='编辑#'+str(problem[0])+'. '+problem[2]+' -XOJ')
+            page_title='管理#'+str(problem[0])+'. '+problem[2]+' -XOJ')
+
+class NewProblemHandler(BaseHandler):
+
+    @gen.coroutine
+    def post(self):
+        p=[self.get_argument(s) for s in ['name','tp','author','visible','invitecode'] ]
+        if p[4] != 'addproblem':
+            self.redirect_msg('/problem/new','邀请码错误')
+            return
+        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
+        cur = conn.cursor()
+
+        sql = "INSERT INTO problems (name,tp,author,visible,ac_num,submit_num,gen_date) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        try:
+            yield cur.execute(sql,(*p[:-1],0,0,datetime.now()))
+            yield conn.commit()
+        except BaseException as e:
+            self.redirect_msg('/problem/new','数据库错误')
+            raise
+        else:
+            sql = "SELECT id FROM problems ORDER BY id DESC LIMIT 1"
+            yield cur.execute(sql)
+            p=cur.fetchone()
+            self.redirect_msg('/problem/%d/edit/0'%p[0],'添加题目成功')
+        finally:
+            cur.close()
+            conn.close()
+
+    @gen.coroutine
+    def get(self):
+        msg = self.get_argument('msg',None)
+        self.render('new_problem.html',msg=msg,page_type='problem',page_title='新题目 -XOJ')
+
+
+class SubmitHandler(BaseHandler):
+
+    @gen.coroutine
+    def get(self,prob_id):
+        prob_id=int(prob_id)
+        if prob_id < 1 :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        prob_id=norm_page(prob_id)
+        msg = self.get_argument('msg',None)
+        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
+        cur = conn.cursor()
+        sql = "SELECT id,tp,name FROM problems WHERE id = %s"
+        yield cur.execute(sql,(prob_id,))
+        problem = cur.fetchone()
+        cur.close()
+        conn.close()
+        if problem == None :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        self.render('submit.html',msg=msg,problem=problem,page_type='problem',\
+            page_title='提交#'+str(problem[0])+'. '+problem[2]+' -XOJ')
