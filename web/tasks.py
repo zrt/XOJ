@@ -3,6 +3,7 @@ import pymysql.cursors
 import re
 from tools import *
 import time
+import json
 import conf
 backend = 'amqp'
 broker = 'amqp://'
@@ -26,7 +27,7 @@ def login(user,pw):
             return 2
         conn = sql_conn()
         cursor = conn.cursor()
-        sql = "SELECT user FROM user WHERE user=%s AND password=%s"
+        sql = "SELECT user,admin FROM user WHERE user=%s AND password=%s LIMIT 1"
         cursor.execute(sql,(user,gen_pw(user,pw),))
         result = cursor.fetchone()
         cursor.close()
@@ -35,10 +36,6 @@ def login(user,pw):
             return 1
         else:
             return 3
-    else:
-        return 2
-    if user=='zrt' and password=='zrt':
-        return 1
     else:
         return 2
 
@@ -61,7 +58,7 @@ def register(user,pw,email,school,invitecode,now):
             return [2,'学校太长']
         conn = sql_conn()
         cursor=conn.cursor()
-        sql = "SELECT user FROM user WHERE user=%s"
+        sql = "SELECT user FROM user WHERE user=%s LIMIT 1"
         cursor.execute(sql,(user,))
         result = cursor.fetchone()
         if result != None:
@@ -73,10 +70,10 @@ def register(user,pw,email,school,invitecode,now):
             return [2,'邀请码错误']
 
         sql = "INSERT INTO user (user,password,email,school,\
-            motto,admin,ac_num,submit_num,gen_date) VALUES \
-            (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            motto,admin,ac_num,submit_num,msg_num,tongji,ac_list,gen_date) VALUES \
+            (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         cursor.execute(sql,(user,gen_pw(user,pw),email,school,\
-            'Write the code. Change the world.',0,0,0,str(now),))
+            'Write the code. Change the world.',0,0,0,0,json.dumps([0]*7),json.dumps([]),str(now),))
         conn.commit()
         cursor.close()
         conn.close()

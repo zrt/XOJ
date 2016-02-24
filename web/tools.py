@@ -3,6 +3,7 @@ from datetime import datetime
 import tornado_mysql
 import hashlib
 import urllib.parse
+import conf
 
 def log(s):
     print(str(datetime.now())+' - '+s)
@@ -51,7 +52,8 @@ def get_pic(email,siz):
 @gen.coroutine
 def CREATE_DATABASE_func():
     'CREATE DATABASE xojdb DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
-    conn = yield tornado_mysql.connect(host='127.0.0.1',port=3306,user='root',passwd='root',db='xojdb')
+    conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
     cur = conn.cursor()
     print('create user table...')
     yield cur.execute('create table user(\
@@ -64,6 +66,9 @@ def CREATE_DATABASE_func():
         ac_num int,\
         submit_num int,\
         gen_date datetime,\
+        msg_num int,\
+        tongji text,\
+        ac_list text,\
         UNIQUE(user))')
     print('create friend table...')
     yield cur.execute('create table friend(\
@@ -91,7 +96,8 @@ def CREATE_DATABASE_func():
         author varchar(22),\
         ac_num int,\
         submit_num int,\
-        gen_date datetime\
+        gen_date datetime,\
+        tongji text\
         )')
     print('create problem_tags table...')
     yield cur.execute('create table problem_tags(\
@@ -128,6 +134,7 @@ def CREATE_DATABASE_func():
         visible int,\
         status int,\
         content text,\
+        result text,\
         images text\
         )')
     print('create join_contest table...')
@@ -148,6 +155,7 @@ def CREATE_DATABASE_func():
         contest_id int,\
         contest_name varchar(22),\
         content text,\
+        modify_date datetime,\
         gen_date datetime\
         )')
     print('create post_tags table...')

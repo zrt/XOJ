@@ -54,7 +54,10 @@ if __name__ == '__main__':
         (r'/problem/(\d+)/edit/1',problem_handler.EditProblemHandler1),
         (r'/problem/(\d+)/edit/2',problem_handler.EditProblemHandler2),
         (r'/problem/(\d+)/submit',problem_handler.SubmitHandler),
+        (r'/problem/(\d+)/status',problem_handler.StatusHandler),
         (r'/problem/new',problem_handler.NewProblemHandler),
+        (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})/edit/0',user_handler.EditHandler0),
+        (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})/edit/1',user_handler.EditHandler1),
     ],**settings)
 
     application.listen(5000)

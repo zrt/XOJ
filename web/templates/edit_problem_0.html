@@ -5,11 +5,11 @@
     <div class="row">
         <div class="col-md-9">
             <div class="progress">
-                <div class="progress-bar progress-bar-success" style="width: 55%"></div>
-                <div class="progress-bar progress-bar-danger" style="width: 15%"></div>
-                <div class="progress-bar progress-bar-warning" style="width: 10%"></div>
-                <div class="progress-bar progress-bar-info" style="width: 10%"></div>
-                <div class="progress-bar progress-bar-progress-bar-striped" style="width: 7%"></div>
+                <div class="progress-bar progress-bar-success" style="width: {{(tongji[1]+1)/(tongji[0]+1)*100}}%"></div>
+                <div class="progress-bar progress-bar-danger" style="width: {{tongji[2]/(tongji[0]+1)*100}}%"></div>
+                <div class="progress-bar progress-bar-warning" style="width: {{tongji[3]/(tongji[0]+1)*100}}%"></div>
+                <div class="progress-bar progress-bar-info" style="width: {{tongji[4]/(tongji[0]+1)*100}}%"></div>
+                <div class="progress-bar progress-bar-progress-bar-striped" style="width: {{tongji[5]/(tongji[0]+1)*100}}%"></div>
             </div>
         </div>
         <div class="col-md-3">
@@ -47,29 +47,87 @@
             <table class="table table-bordered">
                 <tbody>
                     <tr><td>总提交</td>
-                        <td>100</td></tr>
+                        <td><a href="/status?problem={{problem[0]}}">{{tongji[0]}}</a></td></tr>
                     <tr><td>通过</td>
-                        <td>55</td></tr>
+                        <td>{{tongji[1]}}</td></tr>
                     <tr><td>答案错误</td>
-                        <td>15</td></tr>
+                        <td>{{tongji[2]}}</td></tr>
                     <tr><td>超时</td>
-                        <td>10</td></tr>
+                        <td>{{tongji[3]}}</td></tr>
                     <tr><td>超内存</td>
-                        <td>10</td></tr>
+                        <td>{{tongji[4]}}</td></tr>
                     <tr><td>运行错误</td>
-                        <td>7</td></tr>
+                        <td>{{tongji[5]}}</td></tr>
                     <tr><td>编译错误</td>
-                        <td>3</td></tr>
+                        <td>{{tongji[6]}}</td></tr>
+                    <tr><td>其他</td>
+                        <td>{{tongji[0]-sum(tongji[1:])}}</td></tr>
                 </tbody>
             </table>
         </div>
         <div class="col-md-8">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">最近的十次提交</h3>
+                    <h3 class="panel-title">最近的十次提交 &nbsp;&nbsp;<button class="btn btn-link btn-xs" type="button" onclick="window.location.href='/status?problem={{problem[0]}}'">更多</button></h3>
                 </div>
                 <div class="panel-body">
-                    1,2,3,4,5
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>提交者</th>
+                                <th>状态</th>
+                                <th>总用时</th>
+                                <th>内存</th>
+                                <th>代码长度</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in status %}
+                            <tr>
+                                <td>{{row[0]}}</td>
+                                <td><a href="/user/{{row[1]}}">{{row[1]}}</a></td>
+                                <td>
+                                    <a href="/status/{{row[0]}}">
+                                        {% if row[2] == 0 or row[2] == None %}
+                                        <span class="label label-default">非法状态</span>
+                                        {% end %}
+                                        {% if row[2] == 1 %}
+                                        <span class="label label-info">等待评测</span>
+                                        {% end %}
+                                        {% if row[2] == 2 %}
+                                        <span class="label label-primary">评测中</span>
+                                        {% end %}
+                                        {% if row[2] == 3 %}
+                                        <span class="label label-success">通过</span>
+                                        {% end %}
+                                        {% if row[2] == 4 %}
+                                        <span class="label label-danger">答案错误</span>
+                                        {% end %}
+                                        {% if row[2] == 5 %}
+                                        <span class="label label-warning">超时</span>
+                                        {% end %}
+                                        {% if row[2] == 6 %}
+                                        <span class="label label-danger">运行错误</span>
+                                        {% end %}
+                                        {% if row[2] == 7 %}
+                                        <span class="label label-warning">超内存</span>
+                                        {% end %}
+                                        {% if row[2] == 8 %}
+                                        <span class="label label-danger">编译错误</span>
+                                        {% end %}
+                                        {% if row[2] == 9 %}
+                                        <span class="label label-danger">系统错误</span>
+                                        {% end %}
+                                    </a>
+                                </td>
+                                <td>{{row[3]}}</td>
+                                <td>{{row[4]}}</td>
+                                <td>{{row[5]}}</td>
+                            </tr>
+                            {% end %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

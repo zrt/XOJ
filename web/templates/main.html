@@ -61,9 +61,11 @@
     <div class="container theme-showcase" role="main">
       <!-- show msg -->
       {% if msg %}
-      <div class="alert alert-info" role="alert">
+      <div class="alert alert-info" role="alert" id="msg">
         <strong>提示：</strong>
         {{msg}}
+        &nbsp;
+        <button class="btn btn-link btn-sm" type="button" onclick="$('#msg').hide()">关闭</button>
       </div>
       {%end%}
       <div id="content">
@@ -98,5 +100,7 @@
     <link rel="stylesheet" type="text/css" href="{{static_url('css/highlight.css')}}">
     <script type="text/javascript" src="{{static_url('js/highlight.pack.js')}}"></script>
     <script type="text/javascript">$(hljs.initHighlightingOnLoad);</script>
+    <script src="{{static_url('js/highcharts.js')}}"></script> 
+    {%  block jquery %} {% end %}
   </body>
 </html>

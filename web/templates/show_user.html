@@ -1,6 +1,40 @@
 {% extends 'main.html' %}
 {% block body %}
-    <h2>用户信息</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <h2>用户信息</h2>
+        </div>
+        <div class="col-md-4">
+            <h2></h2>
+            {% if user[0].encode('utf-8') == current_user %}
+            <button type="button" class="btn btn-info">我的私信</button>
+            {% else %}
+            <button type="button" class="btn btn-info">发私信</button>
+            {% end %}
+            <div class="btn-group">
+                {% if user[0].encode('utf-8') == current_user %}
+                 <button class="btn btn-info" onclick="window.location.href='/user/{{user[0]}}/edit/0'">修改资料</button> 
+                {% end %}
+                {% if user[0].encode('utf-8') != current_user %}
+                 <button class="btn btn-info" onclick="window.location.href='/user/{{current_user}}'">我的资料</button>
+                {% end %}
+                 <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
+                <ul class="dropdown-menu" >
+                    <li>
+                        <a href="#post">讨论</a>
+                    </li>
+                    <li>
+                        <a href="#msg">报错</a>
+                    </li>
+                    <li class="divider">
+                    </li>
+                    <li >
+                        <a href="/user/{{user[0]}}/edit/1">管理</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-7">
             <h1 class="username">{{user[0]}}</h1>
@@ -44,19 +78,19 @@
             <table class="table table-bordered">
                 <tbody>
                     <tr><td>总提交</td>
-                        <td>100</td></tr>
+                        <td><a href="/status?user={{user[0]}}">{{user[7][0]}}</a></td></tr>
                     <tr><td>通过</td>
-                        <td>55</td></tr>
+                        <td>{{user[7][1]}}</td></tr>
                     <tr><td>答案错误</td>
-                        <td>15</td></tr>
+                        <td>{{user[7][2]}}</td></tr>
                     <tr><td>超时</td>
-                        <td>10</td></tr>
+                        <td>{{user[7][3]}}</td></tr>
                     <tr><td>超内存</td>
-                        <td>10</td></tr>
+                        <td>{{user[7][4]}}</td></tr>
                     <tr><td>运行错误</td>
-                        <td>7</td></tr>
+                        <td>{{user[7][5]}}</td></tr>
                     <tr><td>编译错误</td>
-                        <td>3</td></tr>
+                        <td>{{user[7][6]}}</td></tr>
                 </tbody>
             </table>
         </div>
@@ -66,15 +100,17 @@
                     <h3 class="panel-title">通过的题目(共{{user[5]}}道)</h3>
                 </div>
                 <div class="panel-body">
-                    1,2,3,4,5
+                    {% for p in user[8]%}
+                    <span>{{p}}</span>&nbsp;
+                    {% end %}
                 </div>
             </div>
             <div class="progress">
-                <div class="progress-bar progress-bar-success" style="width: 55%"></div>
-                <div class="progress-bar progress-bar-danger" style="width: 15%"></div>
-                <div class="progress-bar progress-bar-warning" style="width: 10%"></div>
-                <div class="progress-bar progress-bar-info" style="width: 10%"></div>
-                <div class="progress-bar progress-bar-progress-bar-striped" style="width: 7%"></div>
+                <div class="progress-bar progress-bar-success" style="width: {{(user[7][1]+1)/(user[7][0]+1)*100}}%"></div>
+                <div class="progress-bar progress-bar-danger" style="width: {{(user[7][2])/(user[7][0]+1)*100}}%"></div>
+                <div class="progress-bar progress-bar-warning" style="width: {{(user[7][3])/(user[7][0]+1)*100}}%"></div>
+                <div class="progress-bar progress-bar-info" style="width: {{(user[7][4])/(user[7][0]+1)*100}}%"></div>
+                <div class="progress-bar progress-bar-progress-bar-striped" style="width: {{(user[7][5])/(user[7][0]+1)*100}}%"></div>
             </div>
         </div>
     </div>
@@ -85,7 +121,7 @@
                     <h3 class="panel-title">最近发布的文章</h3>
                 </div>
                 <div class="panel-body">
-                    1,2,3,4,5
+                    未开发
                 </div>
             </div>
         </div>
@@ -97,7 +133,7 @@
                     <h3 class="panel-title">最近发布的评论</h3>
                 </div>
                 <div class="panel-body">
-                    1,2,3,4,5
+                    未开发
                 </div>
             </div>
         </div>

@@ -1,0 +1,101 @@
+{% extends 'main.html' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-8">
+            <h2>用户信息</h2>
+        </div>
+        <div class="col-md-4">
+            <h2></h2>
+            {% if user[0].encode('utf-8') == current_user %}
+            <button type="button" class="btn btn-info">我的私信</button>
+            {% else %}
+            <button type="button" class="btn btn-info">发私信</button>
+            {% end %}
+            <div class="btn-group">
+                {% if user[0].encode('utf-8') == current_user %}
+                 <button class="btn btn-info" onclick="window.location.href='/user/{{user[0]}}'">我的资料</button> 
+                {% end %}
+                {% if user[0].encode('utf-8') != current_user %}
+                 <button class="btn btn-info" onclick="window.location.href='/user/{{current_user}}'">我的资料</button>
+                {% end %}
+                 <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
+                <ul class="dropdown-menu" >
+                    <li>
+                        <a href="#post">讨论</a>
+                    </li>
+                    <li>
+                        <a href="#msg">报错</a>
+                    </li>
+                    <li class="divider">
+                    </li>
+                    <li >
+                        <a href="/user/{{user[0]}}/edit/1">管理</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <h1 class="username">{{user[0]}}</h1>
+        </div>
+    </div>
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>题目基本信息</legend>
+            {% raw xsrf_form_html()%}
+            
+            <div class="form-group">
+                <label for="inputEmail" class="col-lg-2 control-label">邮箱</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputEmail" value="{{user[1]}}" name="email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputSchool" class="col-lg-2 control-label">学校</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputSchool" value="{{user[2]}}" name="school" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputMotto" class="col-lg-2 control-label">格言</label>
+                <div class="col-lg-10">
+                    <span class="help-block">50字以内</span>
+                    <textarea class="form-control" rows="5" id="inputMotto" name="motto">{{user[3]}}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">头像</label>
+                <div class="col-lg-10">
+                    <span class="help-block">参考头像设置公告</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword" class="col-lg-2 control-label">旧密码</label>
+                <div class="col-lg-10">
+                    <input type="password" class="form-control" id="inputPassword" name="oldpassword" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword2" class="col-lg-2 control-label">新密码</label>
+                <div class="col-lg-10">
+                    <span class="help-block">不改留空</span>
+                    <input type="password" class="form-control" id="inputPassword2"  name="newpassword">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-lg-2 control-label">新密码</label>
+                <div class="col-lg-10">
+                    <span class="help-block">不改留空</span>
+                    <input type="password" class="form-control" id="inputPassword3">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="reset" class="btn btn-default">重置</button>
+                    <button type="submit" formmethod="post" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% end %}
