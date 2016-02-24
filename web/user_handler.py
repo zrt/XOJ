@@ -13,7 +13,7 @@ class LoginHandler(BaseHandler):
         msg = self.get_argument('msg',None)
         self.render('login.html',msg=msg,page_type='login',page_title='登录 -XOJ')
 
-    @web.asynchronous
+    
     @gen.coroutine
     def post(self):
         user = self.get_argument('user')
@@ -54,7 +54,7 @@ class RegisterHandler(BaseHandler):
         msg = self.get_argument('msg',None)
         self.render('register.html',msg=msg,page_type='register',page_title='注册 -XOJ')
 
-    @web.asynchronous
+    
     @gen.coroutine
     def post(self):
         user,pw,email,school,invitecode= [self.get_argument(s) for s in \
@@ -90,7 +90,11 @@ class ShowUserHandler(BaseHandler):
             return
         user_info=list(user_info)
         user_info[7],user_info[8]=json.loads(user_info[7]),json.loads(user_info[8])
-        self.render('show_user.html',msg=msg,page_type='user',user=user_info,get_pic=get_pic,page_title='用户:'+user+' -XOJ')
+        if user.encode('utf-8') == self.current_user :
+            pgtp='setting'
+        else:
+            pgtp='user'
+        self.render('show_user.html',msg=msg,page_type=pgtp,user=user_info,get_pic=get_pic,page_title='用户:'+user+' -XOJ')
 
 class EditHandler0(BaseHandler):
 

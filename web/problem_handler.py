@@ -6,7 +6,9 @@ from base_handler import BaseHandler
 from tools import *
 import conf
 import tornado_mysql
+import urllib.parse
 import json
+import random
 
 class ProblemsHandler(BaseHandler):
 
@@ -279,30 +281,6 @@ class NewProblemHandler(BaseHandler):
         msg = self.get_argument('msg',None)
         self.render('new_problem.html',msg=msg,page_type='problem',page_title='新题目 -XOJ')
 
-
-class SubmitHandler(BaseHandler):
-
-    @gen.coroutine
-    def get(self,prob_id):
-        prob_id=int(prob_id)
-        if prob_id < 1 :
-            self.redirect_msg('/problems','题目编号错误')
-            return
-        prob_id=norm_page(prob_id)
-        msg = self.get_argument('msg',None)
-        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
-            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
-        cur = conn.cursor()
-        sql = "SELECT id,tp,name FROM problems WHERE id = %s LIMIT 1"
-        yield cur.execute(sql,(prob_id,))
-        problem = cur.fetchone()
-        cur.close()
-        conn.close()
-        if problem == None :
-            self.redirect_msg('/problems','题目编号错误')
-            return
-        self.render('submit.html',msg=msg,problem=problem,page_type='problem',\
-            page_title='提交#'+str(problem[0])+'. '+problem[2]+' -XOJ')
 
 class StatusHandler(BaseHandler):
 

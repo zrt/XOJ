@@ -6,7 +6,7 @@ import urllib.parse
 import conf
 
 def log(s):
-    print(str(datetime.now())+' - '+s)
+    print(str(datetime.now())+' - '+str(s))
 
 def escape(s):
     return  escape.xhtml_escape(s)
@@ -14,6 +14,11 @@ def escape(s):
 def gen_pw(user,pw):
     m = hashlib.md5()
     m.update((user+'XOJ233333333333333- -.#'+pw).encode('utf-8'))
+    return m.hexdigest()
+
+def calc_md5(a,b):
+    m = hashlib.md5()
+    m.update((a+b).encode('utf-8'))
     return m.hexdigest()
 
 def add_param(url,a,b):

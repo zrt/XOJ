@@ -20,13 +20,15 @@ class MainHandler(BaseHandler):
         self.render('index.html',msg=msg,page_title='XOJ',page_type='index')
 
 class TestHandler(BaseHandler):
+
     def get(self):
         self.render('test.html',msg=None,page_title='测试页 -XOJ',page_type='test')
         
+
 if __name__ == '__main__':
 
     settings={
-        'cookie_secret':'topsecret',
+        'cookie_secret': conf.COOKIESECRET,
         'template_path':'./templates',
         'static_path':'./static',
         'debug':True,
@@ -53,7 +55,7 @@ if __name__ == '__main__':
         (r'/problem/(\d+)/edit/0',problem_handler.EditProblemHandler0),
         (r'/problem/(\d+)/edit/1',problem_handler.EditProblemHandler1),
         (r'/problem/(\d+)/edit/2',problem_handler.EditProblemHandler2),
-        (r'/problem/(\d+)/submit',problem_handler.SubmitHandler),
+        (r'/problem/(\d+)/submit',judge_handler.SubmitHandler),
         (r'/problem/(\d+)/status',problem_handler.StatusHandler),
         (r'/problem/new',problem_handler.NewProblemHandler),
         (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})/edit/0',user_handler.EditHandler0),

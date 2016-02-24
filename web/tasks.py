@@ -27,7 +27,7 @@ def login(user,pw):
             return 2
         conn = sql_conn()
         cursor = conn.cursor()
-        sql = "SELECT user,admin FROM user WHERE user=%s AND password=%s LIMIT 1"
+        sql = "SELECT user FROM user WHERE user=%s AND password=%s LIMIT 1"
         cursor.execute(sql,(user,gen_pw(user,pw),))
         result = cursor.fetchone()
         cursor.close()

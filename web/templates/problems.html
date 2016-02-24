@@ -15,7 +15,7 @@
         {% for row in problems %}
         <tr>
             <td>{{row[0]}}</td>
-            <td><a href="/problem/{{row[0]}}">{{row[1]}}</a></td>
+            <td class="pname"><a href="/problem/{{row[0]}}">{{row[1]}}</a></td>
             <td>{{row[2]}}</td>
             <td><a href="/status?problem={{row[0]}}">{{row[3]}}</a></td>
             <td>
