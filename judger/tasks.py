@@ -10,6 +10,7 @@ backend = 'amqp'
 broker = 'amqp://'
 
 app = Celery('tasks',backend=backend,broker=broker)
+platforms.C_FORCE_ROOT = True
 
 'celery -A tasks worker --loglevel=info --pool=solo'
 
