@@ -1,6 +1,4 @@
 from tornado import httpserver,ioloop,web,gen,httpclient
-import tcelery
-import tasks
 from datetime import datetime
 from base_handler import BaseHandler
 from tools import *

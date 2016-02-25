@@ -1,11 +1,13 @@
 from tornado import httpserver,ioloop,web,gen,httpclient
-import tcelery
-import tasks
 from datetime import datetime
 from base_handler import BaseHandler
 from tools import *
 import conf
 import json
+import re
+
+user_rule=r'^[a-zA-Z][0-9a-zA-Z\-]{0,19}$'
+email_rule=r'^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$'
 
 class LoginHandler(BaseHandler):
 
@@ -19,22 +21,29 @@ class LoginHandler(BaseHandler):
         user = self.get_argument('user')
         password = self.get_argument('password')
 
-        r = yield gen.Task(tasks.login.apply_async,args=[user,password])
+        if not re.match(user_rule,user):
+            self.redirect_msg('/login','用户名格式错误')
+            return
 
-        r=r.result
+        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
+        cur = conn.cursor()
+        sql = "SELECT user FROM user WHERE user = %s AND password = %s LIMIT 1"
+        yield cur.execute(sql,(user,gen_pw(user,password)))
+        user=cur.fetchone()
+        cur.close()
+        conn.close()
 
-        if r==1 :
+        user=user[0]
+        if user :
             self.set_secure_cookie('user',user)
             log('user: %s login %s'%(user,self.request.remote_ip))
             jump = self.get_argument('next','/')
             self.redirect_msg(jump,'登录成功')
-        elif r ==2 :
-            self.render('login.html',msg='用户名或密码格式错误',page_type='login',page_title='登录 -XOJ')
-        elif r ==3 :
-            self.render('login.html',msg='用户名或密码错误',page_type='login',page_title='登录 -XOJ')
+            return
         else:
-            log('login error user:%s pass:%s val:%s'%(user,password,str(r.result)))
-            self.render('login.html',msg='未知错误',page_type='login',page_title='登录 -XOJ')
+            self.redirect_msg(jump,'用户名或密码错误')
+            return
 
 
 class LogoutHandler(BaseHandler):
@@ -60,16 +69,53 @@ class RegisterHandler(BaseHandler):
         user,pw,email,school,invitecode= [self.get_argument(s) for s in \
         ['user','password','email','school','invitecode']]
         now=datetime.now()
-        r = yield gen.Task(tasks.register.apply_async,args=[user,pw,email,school,invitecode,now])
-        r = r.result
-        if r[0]==1 :
-            log('user: %s register'%user)
-            self.redirect_msg('/login','注册成功')
-        elif r[0]==2 :
-            self.render('register.html',msg=r[1],page_type='register',page_title='注册 -XOJ')
-        else:
-            log('register error user: %s r0: %d r1: %s',user,r[0],r[1])
-            self.render('register.html',msg='未知错误',page_type='register',page_title='注册 -XOJ')
+
+        if not re.match(user_rule,user):
+            self.redirect_msg('/register','用户名格式错误('+user_rule+')')
+            return
+        if len(pw)<6 :
+            self.redirect_msg('/register','密码太短')
+            return
+        if not re.match(email_rule,email):
+            self.redirect_msg('/register','邮件格式错误')
+            return
+        if len(email) > 50:
+            self.redirect_msg('/register','邮件太长')
+            return
+        if len(school)<2 :
+            self.redirect_msg('/register','请填写学校')
+            return
+        if len(school)>20 :
+            self.redirect_msg('/register','学校太长')
+            return
+
+        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
+        cur=conn.cursor()
+        sql = "SELECT user FROM user WHERE user=%s LIMIT 1"
+        yield cur.execute(sql,(user,))
+        result = cur.fetchone()
+        if result != None:
+            cur.close()
+            conn.close()
+            self.redirect_msg('/register','用户名已存在')
+            return
+        #InviteCode
+        if invitecode != 'test':
+            return [2,'邀请码错误']
+
+        sql = "INSERT INTO user (user,password,email,school,\
+            motto,admin,ac_num,submit_num,msg_num,tongji,ac_list,gen_date) VALUES \
+            (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        yield cur.execute(sql,(user,gen_pw(user,pw),email,school,\
+            'Write the code. Change the world.',0,0,0,0,json.dumps([0]*7),json.dumps([]),str(now),))
+        yield conn.commit()
+        cur.close()
+        conn.close()
+
+        self.redirect_msg('/login','注册成功')
+        
+
 
 class ShowUserHandler(BaseHandler):
 

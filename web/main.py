@@ -1,6 +1,4 @@
 from tornado import httpserver,ioloop,web,gen,httpclient
-import tcelery
-import tasks
 from base_handler import BaseHandler
 from tools import *
 import user_handler
@@ -9,8 +7,8 @@ import contest_handler
 import judge_handler
 import post_handler
 import rank_handler
+import judger_callback_handler
 
-tcelery.setup_nonblocking_producer()
 
 
 class MainHandler(BaseHandler):
@@ -60,6 +58,7 @@ if __name__ == '__main__':
         (r'/problem/new',problem_handler.NewProblemHandler),
         (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})/edit/0',user_handler.EditHandler0),
         (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})/edit/1',user_handler.EditHandler1),
+        (r'/judger\-callbck',judger_callback_handler.CallbackHandler),
     ],**settings)
 
     application.listen(5000)
