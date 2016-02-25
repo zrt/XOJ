@@ -22,7 +22,7 @@ class ProblemsHandler(BaseHandler):
         #visible
         sql = "SELECT id,name,ac_num,submit_num FROM problems LIMIT %s,%s"
         yield cur.execute(sql,((page_now-1)*conf.PROBLEMS_PER_PAGE,conf.PROBLEMS_PER_PAGE))
-        problems = [[*row,int((row[2]+1)/(row[3]+1)*100)] for row in cur]
+        problems = [[row[0],row[1],row[2],row[3],int((row[2]+1)/(row[3]+1)*100)] for row in cur]
         cur.close()
         conn.close()
 
@@ -80,7 +80,7 @@ class EditProblemHandler0(BaseHandler):
         sql = "UPDATE problems SET tp = %s,name = %s,tim_limit = %s,mem_limit = %s,author = %s,visible = %s WHERE id = %s"
 
         try:
-            yield cur.execute(sql,(*p,prob_id))
+            yield cur.execute(sql,(p[0],p[1],p[2],p[3],p[4],p[5],prob_id))
             yield conn.commit()
         except BaseException as e:
             self.redirect_msg('/problem/%d/edit/0'%prob_id,'修改失败，数据库错误')
@@ -144,7 +144,7 @@ class EditProblemHandler1(BaseHandler):
         sql = "UPDATE problems SET content = %s,images = %s WHERE id = %s"
 
         try:
-            yield cur.execute(sql,(*p,prob_id))
+            yield cur.execute(sql,(p[0],p[1],prob_id))
             yield conn.commit()
         except BaseException as e:
             self.redirect_msg('/problem/%d/edit/1'%prob_id,'修改失败，数据库错误')
@@ -207,7 +207,7 @@ class EditProblemHandler2(BaseHandler):
         sql = "UPDATE problems SET data = %s,std_code = %s,val_code = %s,gen_code = %s,spj_code = %s WHERE id = %s"
 
         try:
-            yield cur.execute(sql,(*p,prob_id))
+            yield cur.execute(sql,(p[0],p[1],p[2],p[3],p[4],prob_id))
             yield conn.commit()
         except BaseException as e:
             self.redirect_msg('/problem/%d/edit/2'%prob_id,'修改失败，数据库错误')
@@ -260,7 +260,7 @@ class NewProblemHandler(BaseHandler):
 
         sql = "INSERT INTO problems (name,tp,author,visible,ac_num,submit_num,gen_date,content,tongji) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         try:
-            yield cur.execute(sql,(*p[:-1],0,0,datetime.now(),conf.DEFAULT_CONTENT,json.dumps([0]*7)))
+            yield cur.execute(sql,(p[0],p[1],p[2],p[3],0,0,datetime.now(),conf.DEFAULT_CONTENT,json.dumps([0]*7)))
             yield conn.commit()
         except BaseException as e:
             self.redirect_msg('/problem/new','数据库错误')

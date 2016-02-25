@@ -209,7 +209,7 @@ class EditHandler1(BaseHandler):
 
         sql = "UPDATE user SET email = %s,school = %s,motto = %s,admin = %s  WHERE user = %s"
         try:
-            yield cur.execute(sql,(*p,user))
+            yield cur.execute(sql,(p[0],p[1],p[2],p[3],user))
             yield conn.commit()
         except BaseException as e:
             self.redirect_msg('/user/%s/edit/1'%user,'数据库错误')
