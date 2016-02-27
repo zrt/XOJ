@@ -145,7 +145,7 @@ class SubmitHandler(BaseHandler):
             conn.close()
         self.j_id=judge_id
         self.redirect_msg('/status/%d'%judge_id,'提交成功')
-        judger_callback = urljoin(conf.MYURL,'/judger-callbck')
+        judger_callback = urljoin(conf.MYURL,'/judger-callback')
         judger_url=random.choice(conf.JUDGER)
         judge_content=json.dumps({'id':judge_id,'code':code,\
             'data':problem[3],'spj':problem[2],'lang':lang,\

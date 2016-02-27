@@ -61,7 +61,7 @@ class CallbackHandler(BaseHandler):
         callback = json.loads(content)
 
         tim_now = int(time.time())
-        if callback['tim'] >tim_now or callback['tim'] <tim_now-20:
+        if callback['tim'] >tim_now+20 or callback['tim'] <tim_now-20:
             return
         # callback: id,status,mem_use,tim_use,result(ADD形式) & key
 

@@ -8,7 +8,7 @@ import judge_handler
 import post_handler
 import rank_handler
 import judger_callback_handler
-
+import data_callback_handler
 
 
 class MainHandler(BaseHandler):
@@ -54,6 +54,7 @@ if __name__ == '__main__':
         (r'/problem/(\d+)/edit/0',problem_handler.EditProblemHandler0),
         (r'/problem/(\d+)/edit/1',problem_handler.EditProblemHandler1),
         (r'/problem/(\d+)/edit/2',problem_handler.EditProblemHandler2),
+        (r'/problem/(\d+)/edit/3',problem_handler.EditProblemHandler3),
         (r'/problem/(\d+)/submit',judge_handler.SubmitHandler),
         (r'/problem/(\d+)/status',problem_handler.StatusHandler),
         (r'/post/(\d+)/edit',post_handler.EditHandler),
@@ -61,7 +62,8 @@ if __name__ == '__main__':
         (r'/post/new',post_handler.NewPostHandler),
         (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})/edit/0',user_handler.EditHandler0),
         (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})/edit/1',user_handler.EditHandler1),
-        (r'/judger\-callbck',judger_callback_handler.CallbackHandler),
+        (r'/judger\-callback',judger_callback_handler.CallbackHandler),
+        (r'/data\-callback',data_callback_handler.CallbackHandler),
     ],**settings)
 
     application.listen(5000)

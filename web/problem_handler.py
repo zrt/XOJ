@@ -5,8 +5,10 @@ from tools import *
 import conf
 import tornado_mysql
 import urllib.parse
+from urllib.parse import urljoin
 import json
 import random
+import time
 
 class ProblemsHandler(BaseHandler):
 
@@ -245,6 +247,40 @@ class EditProblemHandler2(BaseHandler):
         tongji=json.loads(problem[8])
         self.render('edit_problem_2.html',msg=msg,problem=problem,tongji=tongji,status=status,page_type='problem',\
             page_title='管理#'+str(problem[0])+'. '+problem[2]+' -XOJ')
+
+class EditProblemHandler3(BaseHandler):
+
+    #编辑数据内容
+    @gen.coroutine
+    def get(self,prob_id):
+        prob_id=int(prob_id)
+        if prob_id < 1 :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        prob_id=norm_page(prob_id)
+        msg = self.get_argument('msg',None)
+        conn = yield tornado_mysql.connect(host=conf.DBHOST,\
+            port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
+        cur = conn.cursor()
+        #
+        sql = "SELECT id,tp,name,data,tongji FROM problems WHERE id = %s LIMIT 1"
+        yield cur.execute(sql,(prob_id,))
+        problem = cur.fetchone()
+        sql = "SELECT id,author,status,tim_use,mem_use,code_len FROM judge WHERE problem_id = %s ORDER BY id  DESC LIMIT 10"
+        yield cur.execute(sql,(prob_id,))
+        status = [row for row in cur]
+        cur.close()
+        conn.close()
+        if problem == None :
+            self.redirect_msg('/problems','题目编号错误')
+            return
+        tim = int(time.time())
+        tongji=json.loads(problem[4])
+        key = calc_md5(self.current_user.decode('utf-8')+str(tim)+str(prob_id),conf.DOWNLOAD_KEY)
+        self.render('edit_problem_3.html',msg=msg,problem=problem,tongji=tongji,status=status,submit=conf.DATA_SERVER,page_type='problem',\
+            page_title='管理#'+str(problem[0])+'. '+problem[2]+' -XOJ',tim=tim,key=key,submit_url=urljoin(conf.DATA_SERVER,'/upload'))
+
+
 
 class NewProblemHandler(BaseHandler):
 

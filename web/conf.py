@@ -12,6 +12,8 @@ JUDGER = ['http://localhost:8088/judger'] #涉及到数据传输，建议使用�
 COOKIESECRET = 'top-secret'
 JUDGER_KEY = 'top-secret'
 MYURL = 'http://localhost:5000/' #用于评测机callback，局域网地址即可
+DATA_SERVER = 'http://localhost:5088/'
+DOWNLOAD_KEY = 'top-secret'
 
 DEFAULT_CONTENT = r'''###**题目描述**
 

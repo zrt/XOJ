@@ -1,6 +1,6 @@
 {% extends 'main.html' %}
 {% block body %}
-    <h1 class="center">管理：#{{problem[0]}}. {{problem[2]}} 评测信息</h1>
+    <h1 class="center">管理：#{{problem[0]}}. {{problem[2]}} 数据信息</h1>
     <br>
     <div class="row">
         <div class="col-md-9">
@@ -34,8 +34,11 @@
                     <li >
                         <a href="/problem/{{problem[0]}}/edit/1">管理题面描述信息</a>
                     </li>
-                    <li class="active">
+                    <li >
                         <a href="/problem/{{problem[0]}}/edit/2">管理题目评测信息</a>
+                    </li>
+                    <li class="active">
+                        <a href="/problem/{{problem[0]}}/edit/3">管理题目数据信息</a>
                     </li>
                 </ul>
             </div>
@@ -132,40 +135,39 @@
             </div>
         </div>
     </div>
-    <form class="form-horizontal">
+    <form class="form-horizontal" action="{{submit_url}}" enctype="multipart/form-data" >
         <fieldset>
+            <input  type="hidden" name="prob_id" value="{{problem[0]}}">
+            <input  type="hidden" name="user" value="{{current_user}}">
+            <input  type="hidden" name="tim" value="{{tim}}">
+            <input  type="hidden" name="key" value="{{key}}">
             <legend>评测信息</legend>
-            <span class="help-block">注意保存，提交失败有可能丢失</span>
-            {% raw xsrf_form_html()%}
+            <span class="help-block">请看数据添加帮助</span>
+            <div class="form-group">
+                <label for="inputFile" class="col-lg-2 control-label">上传数据</label>
+                <div class="col-lg-10">
+                    <span class="help-block">请上传zip压缩文件，里面<strong>直接</strong>为*.in和*.out。<strong>没有</strong>子文件夹。</span>
+                    <span class="help-block">若数据太大可以分批上传，单次大小限制约90MB</span>
+                    <span class="help-block">不要包含任何中文内容</span>
+                    <input class="form-control" type="file" name="zip" id="inputFile">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">是否覆盖之前数据</label>
+                <div class="col-lg-10">
+                    <span class="help-block">若选中下面方块则为覆盖，会删除之前数据；不选中这次添加的数据会和之前数据合并。</span>
+                    <input class="form-control" type="checkbox" name="cover" id="inputFile" value="1">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">数据预览</label>
+                <div class="col-lg-10">
+                    <span class="help-block">数据下载后可能没有后缀名，请手动添加或直接用文本编辑器打开。</span>
+                    <span class="help-block">刚上传的文件可能需要刷新才能显示。</span>
+                    <textarea class="form-control" rows="6" id="inputData" >{{problem[3]}}</textarea>
+                </div>
+            </div>
             
-            <div class="form-group">
-                <label for="inputSpj" class="col-lg-2 control-label">评分程序Spj（必填）</label>
-                <div class="col-lg-10">
-                    <span class="help-block">请看Spj标准，或使用该公告中提供的基本Spj</span>
-                    <textarea class="form-control" rows="6" id="inputSpj" name="spj_code" >{{problem[7]}}</textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputStd" class="col-lg-2 control-label">标准程序（选填）</label>
-                <div class="col-lg-10">
-                    <span class="help-block">建议填写</span>
-                    <textarea class="form-control" rows="6" id="inputStd" name="std_code" >{{problem[4]}}</textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputVal" class="col-lg-2 control-label">数据合法性检验程序（选填）</label>
-                <div class="col-lg-10">
-                    <span class="help-block">请看数据合法性检验程序标准，或使用该公告中提供的基本数据合法性检验程序</span>
-                    <textarea class="form-control" rows="6" id="inputVal" name="val_code" >{{problem[5]}}</textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputGen" class="col-lg-2 control-label">数据生成器（选填）</label>
-                <div class="col-lg-10">
-                    <span class="help-block">请看数据生成器标准，建议填写</span>
-                    <textarea class="form-control" rows="6" id="inputGen" name="gen_code" >{{problem[6]}}</textarea>
-                </div>
-            </div>
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
                     <button type="reset" class="btn btn-default">重置</button>

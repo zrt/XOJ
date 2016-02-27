@@ -25,7 +25,7 @@ class JudgeHandler(BaseHandler):
 
         # callback: id,status,mem_use,tim_use,result(ADD形式) & key
         tim_now=int(time.time())
-        if content['tim'] > tim_now or content['tim'] < tim_now-20:
+        if content['tim'] > tim_now+20 or content['tim'] < tim_now-20:
             return
 
         callback = {'id':content['id'],'status':2,'mem_use':0,'tim_use':0,'result':''}
