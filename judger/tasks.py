@@ -1,4 +1,4 @@
-from celery import Celery
+from celery import Celery,platforms
 import pymysql.cursors
 import re
 from tools import *

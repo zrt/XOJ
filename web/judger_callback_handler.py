@@ -2,6 +2,7 @@ from tornado import httpserver,ioloop,web,gen,httpclient
 from base_handler import BaseHandler
 from tools import *
 import json
+import time
 
 class CallbackHandler(BaseHandler):
     @gen.coroutine
@@ -59,6 +60,9 @@ class CallbackHandler(BaseHandler):
             self.finish()
         callback = json.loads(content)
 
+        tim_now = int(time.time())
+        if callback['tim'] >tim_now or callback['tim'] <tim_now-20:
+            return
         # callback: id,status,mem_use,tim_use,result(ADD形式) & key
 
         conn = yield tornado_mysql.connect(host=conf.DBHOST,\

@@ -5,12 +5,14 @@ DBNAME = 'xojdb'
 DBPORT = 3306
 PROBLEMS_PER_PAGE = 20
 CONTESTS_PER_PAGE = 10
+POSTS_PER_PAGE = 10
 USERS_PER_PAGE = 20
 STATUS_PER_PAGE = 10
-JUDGER = ['http://localhost:8088/judger']
+JUDGER = ['http://localhost:8088/judger'] #涉及到数据传输，建议使用本地局域网地址
 COOKIESECRET = 'top-secret'
 JUDGER_KEY = 'top-secret'
-MYURL = 'http://localhost:5000/'
+MYURL = 'http://localhost:5000/' #用于评测机callback，局域网地址即可
+
 DEFAULT_CONTENT = r'''###**题目描述**
 
 给你两个整数A和B，求A+B的值。

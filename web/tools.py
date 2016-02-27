@@ -155,10 +155,6 @@ def CREATE_DATABASE_func():
         id int NOT NULL AUTO_INCREMENT PRIMARY KEY,\
         name varchar(22),\
         author varchar(22),\
-        problem_id int,\
-        problem_name varchar(22),\
-        contest_id int,\
-        contest_name varchar(22),\
         content text,\
         modify_date datetime,\
         gen_date datetime\

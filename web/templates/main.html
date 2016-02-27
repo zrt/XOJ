@@ -7,7 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="XOJ">
     <meta name="author" content="zrt">
-    <link rel="icon" href="{{static_url('img/favicon.ico')}}">
+    <link rel="icon" href="{{static_url('favicon.ico')}}">
 
     <title>{{ page_title }}</title>
 
@@ -20,8 +20,10 @@
 
     <!-- Custom styles for this template -->
     <link href="{{static_url('css/theme.css')}}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{static_url('css/highlight.css')}}">
 
     <script src="{{static_url('js/ie-emulation-modes-warning.js')}}"></script>
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -80,6 +82,7 @@
     </div> <!-- /container -->
     <script src="{{static_url('js/jquery-2.2.0.min.js')}}"></script>
     <script src="{{static_url('js/showdown.min.js')}}"></script>
+    <script src="{{static_url('js/xss.min.js')}}"></script>
     <script src="{{static_url('js/zrtmarkdown.js')}}"></script>
     <script src="{{static_url('js/bootstrap.min.js')}}"></script>
     <script src="{{static_url('js/ie10-viewport-bug-workaround.js')}}"></script>
@@ -97,7 +100,6 @@
       });
     </script>
     <script src="http://cdn.bootcss.com/mathjax/2.6.0/MathJax.js?config=TeX-AMS_HTML"></script>
-    <link rel="stylesheet" type="text/css" href="{{static_url('css/highlight.css')}}">
     <script type="text/javascript" src="{{static_url('js/highlight.pack.js')}}"></script>
     <script type="text/javascript">$(hljs.initHighlightingOnLoad);</script>
     <script src="{{static_url('js/highcharts.js')}}"></script> 

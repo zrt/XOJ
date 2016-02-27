@@ -161,7 +161,7 @@
             <script type="text/javascript">
                 function getPreview(){
                     var conv = new showdown.Converter();
-                    $('#preview')[0].innerHTML=conv.makeHtml($('#inputContent').val());
+                    $('#preview')[0].innerHTML=filterXSS(conv.makeHtml($('#inputContent').val()));
                     MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
                     $('pre code').each(function(i, block) {
                         hljs.highlightBlock(block);

@@ -5,6 +5,7 @@ import json
 import urllib.parse
 import tcelery
 import tasks
+import time
 
 class JudgeHandler(BaseHandler):
     
@@ -23,10 +24,14 @@ class JudgeHandler(BaseHandler):
         #{'id':,'code':,'data':,'spj':,'lang':,'mem_limit':,'tim_limit':,'callback':}
 
         # callback: id,status,mem_use,tim_use,result(ADD形式) & key
-        
+        tim_now=int(time.time())
+        if content['tim'] > tim_now or content['tim'] < tim_now-20:
+            return
+
         callback = {'id':content['id'],'status':2,'mem_use':0,'tim_use':0,'result':''}
         callback['result'] = '####评测机收到评测请求，正在准备评测...'
 
+        callback['tim']=int(time.time())
         json_callback=json.dumps(callback)
         body_content = urllib.parse.urlencode({'content':json_callback,'key':calc_md5(json_callback,conf.JUDGER_KEY)})
         url = content['callback']+'?'+body_content
@@ -43,6 +48,7 @@ class JudgeHandler(BaseHandler):
             callback['status'] = 9
             callback['result'] = '####评测机准备失败...\n'+r[1]
 
+        callback['tim']=int(time.time())
         json_callback=json.dumps(callback)
         body_content = urllib.parse.urlencode({'content':json_callback,'key':calc_md5(json_callback,conf.JUDGER_KEY)})
         url = content['callback']+'?'+body_content
@@ -61,6 +67,7 @@ class JudgeHandler(BaseHandler):
             callback['status'] = 8
             callback['result'] = '####编译失败...\n'+r[1]
 
+        callback['tim']=int(time.time())
         json_callback=json.dumps(callback)
         body_content = urllib.parse.urlencode({'content':json_callback,'key':calc_md5(json_callback,conf.JUDGER_KEY)})
         url = content['callback']+'?'+body_content
@@ -78,6 +85,7 @@ class JudgeHandler(BaseHandler):
         callback['mem_use'] = r[2]
         callback['tim_use'] = r[3]
 
+        callback['tim']=int(time.time())
         json_callback=json.dumps(callback)
         body_content = urllib.parse.urlencode({'content':json_callback,'key':calc_md5(json_callback,conf.JUDGER_KEY)})
         url = content['callback']+'?'+body_content

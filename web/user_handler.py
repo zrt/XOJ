@@ -34,8 +34,8 @@ class LoginHandler(BaseHandler):
         cur.close()
         conn.close()
 
-        user=user[0]
         if user :
+            user=user[0]
             self.set_secure_cookie('user',user)
             log('user: %s login %s'%(user,self.request.remote_ip))
             jump = self.get_argument('next','/')

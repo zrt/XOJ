@@ -8,6 +8,7 @@ import urllib.parse
 from urllib.parse import urljoin
 import json
 import random
+import time
 
 class StatusHandler(BaseHandler):
 
@@ -67,7 +68,6 @@ class SubmitHandler(BaseHandler):
 
     @gen.coroutine
     def submit_callback(self,response):
-        log(response)
         if response.error:
             conn = yield tornado_mysql.connect(host=conf.DBHOST,\
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
@@ -149,7 +149,7 @@ class SubmitHandler(BaseHandler):
         judger_url=random.choice(conf.JUDGER)
         judge_content=json.dumps({'id':judge_id,'code':code,\
             'data':problem[3],'spj':problem[2],'lang':lang,\
-            'mem_limit':problem[4],'tim_limit':problem[5],'callback':judger_callback})
+            'mem_limit':problem[4],'tim_limit':problem[5],'callback':judger_callback,'tim':int(time.time())})
         body_content=urllib.parse.urlencode({'content':judge_content,'key':calc_md5(judge_content,conf.JUDGER_KEY)})
         url = judger_url+'?'+body_content
         http_client = httpclient.AsyncHTTPClient()

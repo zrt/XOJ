@@ -3,7 +3,7 @@ function htmlDecode(value){
 }
 function tomarkdown(){
     var converter = new showdown.Converter();
-    this.innerHTML=converter.makeHtml(htmlDecode(this.innerHTML))
+    this.innerHTML=filterXSS(converter.makeHtml(htmlDecode(this.innerHTML)))
 }
 $(function (){
     $('.markdown').map(tomarkdown);

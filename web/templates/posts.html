@@ -1,8 +1,65 @@
 {% extends 'main.html' %}
 {% block body %}
-    <div class="jumbotron">
-        <h1>讨论版块</h1>
-        <p>内容规划中..</p>
+    <div class="row">
+        <div class="col-md-8">
+            <h2>讨论</h2>
+        </div>
+        <div class="col-md-4">
+            <h2></h2>
+            <div class="btn-group">
+                <button class="btn btn-info" onclick="window.location.href='/post/new'">发布文章</button>
+                <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
+                <ul class="dropdown-menu" >
+                    <li>
+                        <a href="#notice">发布公告</a>
+                    </li>
+                    <li>
+                        <a href="#my">我的文章</a>
+                    </li>
+                    <li>
+                        <a href="#msg">报错</a>
+                    </li>
+                    <li class="divider">
+                    </li>
+                    <li >
+                        <a href="#">管理</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>标题</th>
+                        <th>发布者</th>
+                        <th>发布时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in posts %}
+                    <tr>
+                        <td>{{row[0]}}</td>
+                        <td><a href="/post/{{row[0]}}">{{row[1]}}</a></td>
+                        <td><a href="/user/{{row[2]}}">{{row[2]}}</a></td>
+                        <td>{{row[3]}}</td>
+                    </tr>
+                    {% end %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+<div class="center">
+    <ul class="pagination">
+        <li {% if pages[0][0] == 0%} class="disabled"{% end%}><a href="{{pages[0][2]}}">&laquo;</a></li>
+        {% for row in pages[1] %}
+        <li {% if row[2]%} class="active"{% end %}><a href="{{row[1]}}">{{row[0]}}</a></li>
+        {% end %}
+        <li {% if pages[0][1] == 0%} class="disable"{% end%}><a href="{{pages[0][3]}}">&raquo;</a></li>
+    </ul>
+</div>
 {% end %}

@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+{% block body %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>{{post[1]}}</h1>
+    </div>
+    <div class="col-md-4">
+        <h2></h2>
+        <div class="btn-group">
+                 <button class="btn btn-info" onclick="">发表评论</button> 
+                 <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
+                <ul class="dropdown-menu" >
+                    <li>
+                        <a href="#post">讨论</a>
+                    </li>
+                    <li>
+                        <a href="#msg">报错</a>
+                    </li>
+                    <li class="divider">
+                    </li>
+                    <li>
+                        <a href="/post/{{post[0]}}/edit">修改文章</a>
+                    </li>
+                </ul>
+            </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h5><a href="/user/{{post[2]}}">{{post[2]}}</a> 发表于 {{post[4]}} ,最后修改与{{post[5]}}</h5>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="markdown content">
+            {{ post[3] }}
+        </div>
+    </div>
+</div>
+
+{% end %}
