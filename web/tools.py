@@ -140,6 +140,7 @@ def CREATE_DATABASE_func():
         status int,\
         content text,\
         result text,\
+        info text,\
         images text\
         )')
     print('create join_contest table...')
@@ -157,6 +158,8 @@ def CREATE_DATABASE_func():
         author varchar(22),\
         content text,\
         modify_date datetime,\
+        visible int,\
+        type int,\
         gen_date datetime\
         )')
     print('create post_tags table...')
