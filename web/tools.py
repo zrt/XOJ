@@ -24,7 +24,7 @@ def calc_md5(a,b):
 def add_param(url,a,b):
     params = {a:b}
     url_parts = list(urllib.parse.urlparse(url))
-    query = dict(url_parts[4])
+    query = dict(urllib.parse.parse_qsl(url_parts[4]))
     query.update(params)
     url_parts[4] = urllib.parse.urlencode(query)
     url = urllib.parse.urlunparse(url_parts)

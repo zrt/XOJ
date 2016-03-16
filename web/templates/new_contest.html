@@ -1,0 +1,78 @@
+{% extends 'main.html' %}
+{% block body %}
+    <h1 class="center">新建比赛</h1>
+    <br>
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>新比赛</legend>
+            {% raw xsrf_form_html()%}
+            <div class="form-group">
+                <label for="inputName" class="col-lg-2 control-label">比赛名称</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputName"  name="name" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputInfo" class="col-lg-2 control-label">比赛简单介绍</label>
+                <div class="col-lg-10">
+                    <span class="help-block">显示在比赛目录</span>
+                    <textarea class="form-control" rows="5" id="inputInfo" name="info" required></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputContent" class="col-lg-2 control-label">比赛介绍</label>
+                <div class="col-lg-10">
+                    <textarea class="form-control" rows="10" id="inputContent" name="content" required></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputProblems" class="col-lg-2 control-label">比赛题目</label>
+                <div class="col-lg-10">
+                    <span class="help-block">题目可以（建议）处于隐藏状态</span>
+                    <span class="help-block">JSON list</span>
+                    <textarea class="form-control" rows="3" id="inputProblems" name="problems"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputBegin" class="col-lg-2 control-label">比赛开始时间</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputBegin" name="begin_date" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEnd" class="col-lg-2 control-label">比赛结束时间</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputEnd" name="end_date" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputAuthor" class="col-lg-2 control-label">举办者</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputAuthor" value="{{current_user}}" disabled="">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="inputVisible" class="col-lg-2 control-label">比赛可见度</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputVisible" name="visible" value="1000" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="invitecode" class="col-lg-2 control-label">邀请码</label>
+                <div class="col-lg-10">
+                    <span class="help-block">请输入addcontest</span>
+                    <input type="text" class="form-control" id="invitecode" name="invitecode"  required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="submit" formmethod="post" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+{% end %}

@@ -333,10 +333,10 @@ class StatusHandler(BaseHandler):
         sql = "SELECT id,tp,name,tongji FROM problems WHERE id = %s LIMIT 1"
         yield cur.execute(sql,(prob_id,))
         problem = cur.fetchone()
-        sql = "SELECT id,author,status,tim_use,mem_use,lang,code_len,submit_date FROM judge WHERE problem_id = %s ORDER BY tim_use  LIMIT 10"
+        sql = "SELECT id,author,status,tim_use,mem_use,lang,code_len,submit_date FROM judge WHERE problem_id = %s AND status = 3 ORDER BY tim_use  LIMIT 10"
         yield cur.execute(sql,(prob_id,))
         fast = [row for row in cur]
-        sql = "SELECT id,author,status,tim_use,mem_use,lang,code_len,submit_date FROM judge WHERE problem_id = %s ORDER BY code_len  LIMIT 10"
+        sql = "SELECT id,author,status,tim_use,mem_use,lang,code_len,submit_date FROM judge WHERE problem_id = %s AND status = 3 ORDER BY code_len  LIMIT 10"
         yield cur.execute(sql,(prob_id,))
         short = [row for row in cur]
         cur.close()

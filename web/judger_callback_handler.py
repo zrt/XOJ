@@ -17,15 +17,18 @@ class CallbackHandler(BaseHandler):
 
         #user ac_num,ac_list,tongji
         #problems ac_num,tongji
+        newac=False
         sql = "SELECT ac_num,ac_list,tongji FROM user WHERE user = %s LIMIT 1"
         yield cur.execute(sql,(user,))
         info = cur.fetchone()
         ac_num = info[0]
-        if callback['status'] == 3:
-            ac_num=ac_num+1
         ac_list = json.loads(info[1])
         if callback['status'] == 3 and (prob_id not in ac_list):
             ac_list.append(prob_id)
+            newac = True
+        if callback['status'] == 3 and newac:
+            ac_num=ac_num+1
+        
         tongji = json.loads(info[2])
         tongji[[0,0,0,1,2,3,5,4,6][callback['status']]]=tongji[[0,0,0,1,2,3,5,4,6][callback['status']]]+1
         sql = "UPDATE user SET ac_num = %s,ac_list = %s,tongji=%s WHERE user = %s"
@@ -36,7 +39,7 @@ class CallbackHandler(BaseHandler):
         yield cur.execute(sql,(prob_id,))
         info = cur.fetchone()
         ac_num = info[0]
-        if callback['status'] == 3:
+        if callback['status'] == 3 and newac:
             ac_num=ac_num+1
         tongji = json.loads(info[1])
         tongji[[0,0,0,1,2,3,5,4,6][callback['status']]]=tongji[[0,0,0,1,2,3,5,4,6][callback['status']]]+1

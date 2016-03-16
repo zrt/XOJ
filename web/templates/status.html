@@ -1,6 +1,20 @@
 {% extends 'main.html' %}
 
 {% block body %}
+<div class="row">
+    <form>
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="提交者" name="user">
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="题目编号" name="problem"> 
+        </div>
+        <div class="col-md-2">
+            <input type="submit" class="btn btn-info btn-block" value="查询">
+        </div>
+    </form>
+</div>
+</br>
 <table class="table table-striped">
     <thead>
         <tr>

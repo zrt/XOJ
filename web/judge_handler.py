@@ -5,7 +5,7 @@ from tools import *
 import conf
 import tornado_mysql
 import urllib.parse
-from urllib.parse import urljoin
+from urllib.parse import urljoin,urlencode
 import json
 import random
 import time
@@ -17,19 +17,31 @@ class StatusHandler(BaseHandler):
         msg = self.get_argument('msg',None)
         page_now = int(self.get_argument('page','1'))
         page_now=norm_page(page_now)
-
+        user = self.get_argument('user',None)
+        problem = self.get_argument('problem',None)
         conn = yield tornado_mysql.connect(host=conf.DBHOST,\
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
         #visible
         sql = "SELECT id,problem_id,problem_name,author,status,\
-        tim_use,mem_use,submit_date FROM judge ORDER BY id DESC LIMIT %s,%s"
-        yield cur.execute(sql,((page_now-1)*conf.STATUS_PER_PAGE,conf.STATUS_PER_PAGE))
+        tim_use,mem_use,submit_date FROM judge WHERE id >0 "
+
+        param = [] #visible
+        if user:
+            sql+=" AND author=%s "
+            param.append(user)
+        if problem:
+            sql+=" AND problem_id = %s "
+            param.append(problem)
+        sql+="ORDER BY id DESC LIMIT %s,%s"
+        param.append((page_now-1)*conf.STATUS_PER_PAGE)
+        param.append(conf.STATUS_PER_PAGE)
+        yield cur.execute(sql,tuple(param))
         records = [row for row in cur]
         cur.close()
         conn.close()
         
-        url='/status'
+        url=urljoin('/status','?'+urlencode({'user':user or '','problem':problem or ''}))
 
         pages=gen_pages(url,page_now)
         self.render('status.html',msg=msg,records=records,pages=pages,\

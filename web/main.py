@@ -50,6 +50,7 @@ if __name__ == '__main__':
         (r'/problem/(\d+)',problem_handler.ProblemHandler),
         (r'/post/(\d+)',post_handler.PostHandler),
         (r'/contest/(\d+)',contest_handler.ContestHandler),
+        (r'/contest/new',contest_handler.NewContestHandler),
         (r'/status/(\d+)',judge_handler.InfoHandler),
         (r'/problem/(\d+)/edit/0',problem_handler.EditProblemHandler0),
         (r'/problem/(\d+)/edit/1',problem_handler.EditProblemHandler1),

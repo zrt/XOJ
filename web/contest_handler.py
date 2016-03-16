@@ -52,3 +52,10 @@ class ContestHandler(BaseHandler):
             return
         self.render('contest.html',msg=msg,contest=contest,\
             page_type='contest',page_title='比赛#'+str(contest[0])+'. '+contest[1]+' -XOJ')
+
+
+class NewContestHandler(BaseHandler):
+
+    def get(self):
+        msg = self.get_argument('msg',None)
+        self.render('new_contest.html',msg=msg,page_type='contest',page_title='新建比赛 -XOJ')
