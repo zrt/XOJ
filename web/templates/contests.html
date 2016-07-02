@@ -23,6 +23,11 @@
         {% end %}
     </tbody>
 </table>
+<div class="row">
+    <div class="col-md-3 col-md-offset-9">
+        <button class="btn btn-info" onclick="window.location.href='/contest/new'">添加新比赛</button>
+    </div>
+</div>
 <div class="center">
     <ul class="pagination">
         <li {% if pages[0][0] == 0%} class="disabled"{% end%}><a href="{{pages[0][2]}}">&laquo;</a></li>

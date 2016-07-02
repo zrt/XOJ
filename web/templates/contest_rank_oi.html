@@ -1,0 +1,58 @@
+{% extends 'main.html' %}
+{% block body %}
+<div class="row">
+        <div class="col-md-6">
+            <h2>OI排名版#{{contest_id}}</h2>
+        </div>
+        <div class="col-md-2">
+            <br>
+            <a class="btn btn-info" href="/contest/{{contest_id}}/rank">ACM赛制得分</a>
+        </div>
+        <div class="col-md-2">
+            <br>
+            <form action="" method="post">
+            {% raw xsrf_form_html()%}
+            <input type="submit" class="btn btn-danger" value="重测所有记录">
+            </form>
+        </div>
+        <div class="col-md-2">
+            <br>
+            <a class="btn btn-info btn-block" href="/contest/{{contest_id}}">返回比赛</a>
+        </div>
+</div>
+</br>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>用户名</th>
+            <th>得分</th>
+            {% for row in problems%}
+            <th>{{row}}</th>
+            {% end %}
+        </tr>
+    </thead>
+    <tbody>
+        {% set num = 0%}
+        {% for row in result %}
+        {% set num = num +1 %}
+
+        <tr>
+            <td>{{num}}</td>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            {% for i in range(len(problems)) %}
+            <td>
+                    {% if row[3][i][0] == 1 %}
+                    <span class="label label-success">{{row[3][i][1]}} | {{row[3][i][2]}}</span>
+                    {% end %}
+                    {% if row[3][i][0] == 0 %}
+                    <span class="label label-default">{{row[3][i][1]}} | {{row[3][i][2]}}</span>
+                    {% end %}
+            </td>
+            {% end %}
+        </tr>
+        {% end %}
+    </tbody>
+</table>
+{% end %}

@@ -5,16 +5,18 @@
     <div class="row">
         <div class="col-md-9">
             <div class="progress">
-                <div class="progress-bar progress-bar-success" style="width: {{(now-contest[3])/(contest[4]-contest[3])*100.0}}%"></div>
+                <div class="progress-bar progress-bar-success" style="width: 0%"></div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="btn-group">
-                <button class="btn btn-info" onclick="window.location.href='/contest/{{contest[0]}}/rank'">查看排名版</button> 
-                 <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
+                <form action="" method="post">
+                    {% raw xsrf_form_html()%}
+                    <input type="submit" class="btn btn-info" value="报名比赛">
+                    <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
                 <ul class="dropdown-menu" >
                     <li>
-                        <a href="/contest/{{contest[0]}}/status">统计</a>
+                        <a href="/contest/{{contest[0]}}/start">停止报名</a>
                     </li>
                     <li>
                         <a href="#post">讨论</a>
@@ -24,10 +26,11 @@
                     </li>
                     <li class="divider">
                     </li>
-                    <li>
+                    <li >
                         <a href="/contest/{{contest[0]}}/edit">管理</a>
                     </li>
                 </ul>
+                </form>
             </div>
         </div>
     </div>
@@ -43,8 +46,8 @@
                         <td>{{contest[3]}}</td></tr>
                     <tr><td>比赛结束时间</td>
                         <td>{{contest[4]}}</td></tr>
-                    <tr><td>距离比赛结束</td>
-                        <td>{{contest[4]-now}}</td></tr>
+                    <tr><td>距离比赛开始</td>
+                        <td>{{contest[3]-now}}</td></tr>
                     <tr><td>举办者</td>
                         <td>{{contest[2]}}</td></tr>
                 </tbody>
@@ -69,28 +72,24 @@
         <div class="col-md-12">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">比赛题目</h3>
+                    <h3 class="panel-title">已报名用户</h3>
                 </div>
                 <div class="panel-body">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>题目名称</th>
-                                <th>通过人数</th>
-                                <th>提交次数</th>
+                                <th>用户名</th>
+                                <th>报名时间</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {%set num=0 %}
-                            {% for row in problems %}
+                            {% for row in register %}
                             <tr>
-                                <td><a href="/contest/{{contest[0]}}/{{num}}">{{num}}</a></td>
-                                <td><a href="/contest/{{contest[0]}}/{{num}}">{{row[0]}}</a></td>
-                                <td>{{row[1]}}</td>
+                                <td>{{row[0]}}</td>
+                                <td><a href="/user/{{row[1]}}">{{row[1]}}</a></td>
                                 <td>{{row[2]}}</td>
                             </tr>
-                            {%set num = num + 1%}
                             {% end %}
                         </tbody>
                     </table>

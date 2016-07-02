@@ -4,14 +4,30 @@
         <div class="col-md-7"><h1>评测记录 #{{info[0]}}</h1></div>
         <div class="btn-group col-md-5">
             <h1></h1>
-             <button class="btn btn-info" onclick="window.location.href='/problem/{{info[3]}}'">返回题目页面</button> 
-             <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
+            {% if info[3] < 0 %}
+            <button class="btn btn-info" onclick="window.location.href='/contest/{{(-info[3])//100}}/{{(-info[3])%100}}'">返回题目页面</button> 
+            {% end %}
+            {% if info[3] > 0 %}
+            <button class="btn btn-info" onclick="window.location.href='/problem/{{info[3]}}'">返回题目页面</button> 
+            {% end %}
+            <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
             <ul class="dropdown-menu" >
                 <li>
+                    {% if info[3] < 0 %}
+                    <a href="/contest/{{(-info[3])//100}}/{{(-info[3])%100}}/submit">提交页面</a>
+                    {% end %}
+                    {% if info[3] > 0 %}
                     <a href="/problem/{{info[3]}}/submit">提交页面</a>
+                    {% end %}
+                    
                 </li>
                 <li>
+                    {% if info[3] < 0 %}
+                    <a href="/contest/{{(-info[3])//100}}/{{(-info[3])%100}}/status">统计</a>
+                    {% end %}
+                    {% if info[3] > 0 %}
                     <a href="/problem/{{info[3]}}/status">统计</a>
+                    {% end %}
                 </li>
                 <li>
                     <a href="#post">讨论</a>
@@ -29,7 +45,12 @@
                 <li class="divider">
                 </li>
                 <li>
+                    {% if info[3] < 0 %}
+                    <a href="/contest/{{(-info[3])//100}}/edit">管理</a>
+                    {% end %}
+                    {% if info[3] > 0 %}
                     <a href="/problem/{{info[3]}}/edit/0">管理</a>
+                    {% end %}
                 </li>
             </ul>
         </div>
@@ -48,9 +69,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>#{{info[3]}}. {{info[4]}}</td>
-                        <td>{{info[1]}}</td>
+                        <tr>{% if info[3] < 0 %}
+                        <td><a href="/contest/{{(-info[3])//100}}/{{(-info[3])%100}}">比赛#{{(-info[3])//100}}.T{{(-info[3])%100}} {{info[4]}}</a></td>
+                        {% end %}
+                        {% if info[3] > 0 %}
+                        <td><a href="/problem/{{info[3]}}">#{{info[3]}}. {{info[4]}}</a></td>
+                        {% end %}
+                        <td><a href="/user/{{info[1]}}">{{info[1]}}</a></td>
                         <td>
                             {% if info[5] == 0 or info[5] == None %}
                             <span class="label label-default">非法状态</span>
@@ -100,9 +125,9 @@
                 <tbody>
                     <tr>
                         <td>{{ ['Error','C++','C','Python3','Python2.7'][info[8]] }}</td>
-                        <td>{{info[9]}}</td>
-                        <td>{{info[7]}}ms</td>
-                        <td>{{info[6]}}kb</td>
+                        <td>{{info[9]}}B</td>
+                        <td>{{info[7]}}MS</td>
+                        <td>{{info[6]}}KB</td>
                     </tr>
                 </tbody>
             </table>

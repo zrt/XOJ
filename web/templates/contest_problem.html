@@ -1,21 +1,17 @@
 {% extends 'main.html' %}
 {% block body %}
-<h1 class="center">#{{problem[0]}}. {{problem[2]}}</h1>
+<h1 class="center">比赛题目# {{problem[2]}}</h1>
 <div class="row">
     <div class="col-md-12">
         <div class="center">
             <h5>
             <span class="label label-info">时间限制: {{problem[4]}}ms</span>&nbsp;
             <span class="label label-info">空间限制: {{problem[5]}}MB</span>&nbsp;
-            <span class="label label-info">通过人数: {{problem[7]}}次</span>&nbsp;
-            <span class="label label-info">提交次数: {{problem[8]}}次</span>&nbsp;
+            <button class="btn btn-info" onclick="window.location.href='/contest/{{contest_id}}'">返回比赛</button> 
             <div class="btn-group">
-                 <button class="btn btn-info" onclick="window.location.href='/problem/{{problem[0]}}/submit'">提交</button> 
+                 <button class="btn btn-info" onclick="window.location.href='/contest/{{contest_id}}/{{problem[0]}}/submit'">提交</button> 
                  <button data-toggle="dropdown" class="btn btn-info dropdown-toggle"><span class="caret"></span></button>
                 <ul class="dropdown-menu" >
-                    <li>
-                        <a href="/problem/{{problem[0]}}/status">统计</a>
-                    </li>
                     <li>
                         <a href="#post">讨论</a>
                     </li>
@@ -25,7 +21,7 @@
                     <li class="divider">
                     </li>
                     <li>
-                        <a href="/problem/{{problem[0]}}/edit/0">管理</a>
+                        <a href="/contest/{{contest_id}}/edit">管理</a>
                     </li>
                 </ul>
             </div>

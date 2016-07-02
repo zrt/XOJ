@@ -3,6 +3,7 @@ from datetime import datetime
 from base_handler import BaseHandler
 from tools import *
 import conf
+import time
 import json
 import re
 
@@ -28,36 +29,41 @@ class LoginHandler(BaseHandler):
         conn = yield tornado_mysql.connect(host=conf.DBHOST,\
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
-        sql = "SELECT user FROM user WHERE user = %s AND password = %s LIMIT 1"
+        sql = "SELECT user,admin FROM user WHERE user = %s AND password = %s LIMIT 1"
         yield cur.execute(sql,(user,gen_pw(user,password)))
         user=cur.fetchone()
         cur.close()
         conn.close()
 
         if user :
+            self.set_secure_cookie('auth',str(user[1]),expires=time.time()+4*60*60)
             user=user[0]
-            self.set_secure_cookie('user',user)
+            self.set_secure_cookie('user',user,expires=time.time()+4*60*60)
             log('user: %s login %s'%(user,self.request.remote_ip))
             jump = self.get_argument('next','/')
             self.redirect_msg(jump,'登录成功')
             return
         else:
-            self.redirect_msg(jump,'用户名或密码错误')
+            self.redirect_msg('/login','用户名或密码错误')
             return
 
 
 class LogoutHandler(BaseHandler):
 
+    @web.authenticated
     def get(self):
         msg = self.get_argument('msg',None)
         self.render('logout.html',msg=msg,page_type='logout',page_title='注销 -XOJ')
 
+    @web.authenticated
     def post(self):
         self.clear_cookie('user')
+        self.clear_cookie('auth')
         self.redirect_msg('/','注销成功')
 
 
 class RegisterHandler(BaseHandler):
+
 
     def get(self):
         msg = self.get_argument('msg',None)
@@ -104,11 +110,15 @@ class RegisterHandler(BaseHandler):
         if invitecode != 'test':
             return [2,'邀请码错误']
 
+        if user.encode('utf-8') == 'sys':
+            auth = 1000
+        else:
+            auth = 0
         sql = "INSERT INTO user (user,password,email,school,\
             motto,admin,ac_num,submit_num,msg_num,tongji,ac_list,gen_date) VALUES \
             (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         yield cur.execute(sql,(user,gen_pw(user,pw),email,school,\
-            'Write the code. Change the world.',0,0,0,0,json.dumps([0]*7),json.dumps([]),str(now),))
+            'Write the code. Change the world.',auth,0,0,0,json.dumps([0]*7),json.dumps([]),str(now),))
         yield conn.commit()
         cur.close()
         conn.close()
@@ -119,6 +129,7 @@ class RegisterHandler(BaseHandler):
 
 class ShowUserHandler(BaseHandler):
 
+    @web.authenticated
     @gen.coroutine
     def get(self,user):
         msg = self.get_argument('msg',None)
@@ -144,8 +155,12 @@ class ShowUserHandler(BaseHandler):
 
 class EditHandler0(BaseHandler):
 
+    @web.authenticated
     @gen.coroutine
     def post(self,user):
+        if user.encode('utf-8') != self.current_user:
+            self.redirect_msg('/rank','权限不足')
+            return
         pw = self.get_argument('oldpassword')
         conn = yield tornado_mysql.connect(host=conf.DBHOST,\
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
@@ -178,7 +193,7 @@ class EditHandler0(BaseHandler):
             cur.close()
             conn.close()
 
-
+    @web.authenticated
     @gen.coroutine
     def get(self,user):
         msg = self.get_argument('msg',None)
@@ -191,6 +206,11 @@ class EditHandler0(BaseHandler):
         user_info=cur.fetchone()
         cur.close()
         conn.close()
+
+        if user_info[0].encode('utf-8') != self.current_user:
+            self.redirect_msg('/rank','权限不足')
+            return
+
         if user_info == None:
             self.redirect_msg('/','用户名错误')
             return
@@ -198,12 +218,18 @@ class EditHandler0(BaseHandler):
 
 class EditHandler1(BaseHandler):
 
-
+    @web.authenticated
     @gen.coroutine
     def post(self,user):
         conn = yield tornado_mysql.connect(host=conf.DBHOST,\
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
+
+        auth = self.auth()
+
+        if auth <500:
+            self.redirect_msg('/rank','权限不足')
+            return
 
         p = [self.get_argument(s) for s in ['email','school','motto','admin']]
 
@@ -220,6 +246,7 @@ class EditHandler1(BaseHandler):
             cur.close()
             conn.close()
 
+    @web.authenticated
     @gen.coroutine
     def get(self,user):
         msg = self.get_argument('msg',None)
@@ -234,6 +261,11 @@ class EditHandler1(BaseHandler):
         conn.close()
         if user_info == None:
             self.redirect_msg('/','用户名错误')
+            return
+        auth = self.auth()
+
+        if auth <500:
+            self.redirect_msg('/rank','权限不足')
             return
         self.render('edit_user_1.html',msg=msg,page_type='user',user=user_info,get_pic=get_pic,page_title='管理用户:'+user+' -XOJ')
 

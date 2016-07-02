@@ -8,14 +8,16 @@ CONTESTS_PER_PAGE = 10
 POSTS_PER_PAGE = 10
 USERS_PER_PAGE = 20
 STATUS_PER_PAGE = 10
-JUDGER = ['http://localhost:8088/judger'] #涉及到数据传输，建议使用本地局域网地址
+JUDGER = ['http://10.211.55.4:8088/judger'] #涉及到数据传输，建议使用本地局域网地址
 COOKIESECRET = 'top-secret'
 JUDGER_KEY = 'top-secret'
-MYURL = 'http://localhost:5000/' #用于评测机callback，局域网地址即可
-DATA_SERVER = 'http://localhost:5088/'
+MYURL = 'http://192.168.0.107:5000' #用于评测机callback，局域网地址即可
+DATA_SERVER = '/'
 DOWNLOAD_KEY = 'top-secret'
+SERVER_URL = 'http://192.168.0.107' #用于展示的url，建议外网地址
 
-DEFAULT_CONTENT = r'''###**题目描述**
+DEFAULT_CONTENT = r'''\
+###**题目描述**
 
 给你两个整数A和B，求A+B的值。
 

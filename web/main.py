@@ -9,10 +9,14 @@ import post_handler
 import rank_handler
 import judger_callback_handler
 import data_callback_handler
+import contest_judge_handler
+import download_handler
+import upload_handler
 
 
 class MainHandler(BaseHandler):
 
+    @web.authenticated
     def get(self):
         msg = self.get_argument('msg',None)
         self.render('index.html',msg=msg,page_title='XOJ',page_type='index')
@@ -35,6 +39,7 @@ if __name__ == '__main__':
     }
 
     application = web.Application(handlers=[
+
         (r'/',MainHandler),
         (r'/login',user_handler.LoginHandler),
         (r'/logout',user_handler.LogoutHandler),
@@ -50,9 +55,15 @@ if __name__ == '__main__':
         (r'/problem/(\d+)',problem_handler.ProblemHandler),
         (r'/post/(\d+)',post_handler.PostHandler),
         (r'/contest/(\d+)',contest_handler.ContestHandler),
+        (r'/contest/(\d+)/start',contest_handler.ContestPrepareHandler),
         (r'/contest/new',contest_handler.NewContestHandler),
+        (r'/contest/(\d+)/edit',contest_handler.EditContestHandler),
+        (r'/contest/(\d+)/rank',contest_handler.ContestRankHandler),
+        (r'/contest/(\d+)/(\d+)',contest_handler.ContestProblemHandler),
+        (r'/contest/(\d+)/(\d+)/submit',contest_judge_handler.SubmitHandler),
         (r'/status/(\d+)',judge_handler.InfoHandler),
         (r'/problem/(\d+)/edit/0',problem_handler.EditProblemHandler0),
+        (r'/contest/(\d+)/edit',contest_handler.EditContestHandler),
         (r'/problem/(\d+)/edit/1',problem_handler.EditProblemHandler1),
         (r'/problem/(\d+)/edit/2',problem_handler.EditProblemHandler2),
         (r'/problem/(\d+)/edit/3',problem_handler.EditProblemHandler3),
@@ -64,7 +75,10 @@ if __name__ == '__main__':
         (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})/edit/0',user_handler.EditHandler0),
         (r'/user/([a-zA-Z][0-9a-zA-Z\-]{0,19})/edit/1',user_handler.EditHandler1),
         (r'/judger\-callback',judger_callback_handler.CallbackHandler),
+        (r'/contest\-callback',contest_judge_handler.CallbackHandler),
         (r'/data\-callback',data_callback_handler.CallbackHandler),
+        (r'/upload',upload_handler.UpHandler),
+        (r'/download',download_handler.DownHandler),
     ],**settings)
 
     application.listen(5000)

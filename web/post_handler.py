@@ -7,6 +7,7 @@ import tornado_mysql
 
 class PostsHandler(BaseHandler):
 
+    @web.authenticated
     @gen.coroutine
     def get(self):
         msg = self.get_argument('msg',None)
@@ -31,12 +32,19 @@ class PostsHandler(BaseHandler):
 
 class NewPostHandler(BaseHandler):
 
+    @web.authenticated
     @gen.coroutine
     def post(self):
         p=[self.get_argument(s) for s in ['name','content','invitecode'] ]
+        auth = self.auth()
+
+        if auth < 10:
+            self.redirect_msg('/posts','权限不足')
+            return
         if p[2] != 'addpost':
             self.redirect_msg('/post/new','邀请码错误')
             return
+
         conn = yield tornado_mysql.connect(host=conf.DBHOST,\
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
@@ -57,13 +65,20 @@ class NewPostHandler(BaseHandler):
             cur.close()
             conn.close()
 
+    @web.authenticated
     def get(self):
         msg = self.get_argument('msg',None)
+        auth = self.auth()
+
+        if auth < 10:
+            self.redirect_msg('/status','权限不足')
+            return
         self.render('new_post.html',msg=msg,page_type='post',page_title='新文章 -XOJ')
 
 
 class PostHandler(BaseHandler):
 
+    @web.authenticated
     @gen.coroutine
     def get(self,post_id):
         post_id=int(post_id)
@@ -85,11 +100,13 @@ class PostHandler(BaseHandler):
         if post == None :
             self.redirect_msg('/posts','题目编号错误')
             return
+        
         self.render('post.html',msg=msg,post=post,page_type='post',\
             page_title='文章:'+post[1]+' -XOJ')
 
 class EditHandler(BaseHandler):
 
+    @web.authenticated
     @gen.coroutine
     def get(self,post_id):
         post_id=int(post_id)
@@ -103,7 +120,7 @@ class EditHandler(BaseHandler):
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
         #
-        sql = "SELECT name,content FROM posts WHERE id = %s LIMIT 1"
+        sql = "SELECT name,content,author FROM posts WHERE id = %s LIMIT 1"
         yield cur.execute(sql,(post_id,))
         post = cur.fetchone()
         cur.close()
@@ -111,9 +128,16 @@ class EditHandler(BaseHandler):
         if post == None :
             self.redirect_msg('/posts','题目编号错误')
             return
+        user = self.current_user
+        auth = self.auth()
+
+        if auth < 200 and post[2].encode('utf-8')!= user:
+            self.redirect_msg('/posts','权限不足')
+            return
         self.render('edit_post.html',msg=msg,post=post,page_type='post',\
             page_title='修改文章:'+post[0]+' -XOJ')
 
+    @web.authenticated
     @gen.coroutine
     def post(self,post_id):
         post_id=int(post_id)
@@ -126,14 +150,21 @@ class EditHandler(BaseHandler):
         conn = yield tornado_mysql.connect(host=conf.DBHOST,\
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
-        sql = "SELECT id FROM posts WHERE id = %s LIMIT 1"
+        sql = "SELECT id,author FROM posts WHERE id = %s LIMIT 1"
         yield cur.execute(sql,(post_id,))
         post = cur.fetchone()
 
         if post == None :
             cur.close()
             conn.close()
-            self.redirect_msg('/posts','题目编号错误')
+            self.redirect_msg('/posts','文章编号错误')
+            return
+
+        user = self.current_user
+        auth = self.auth()
+
+        if auth < 200 and post[1].encode('utf-8')!= user:
+            self.redirect_msg('/posts','权限不足')
             return
 
         p=[self.get_argument(s) for s in ['name','content'] ]
@@ -154,6 +185,7 @@ class EditHandler(BaseHandler):
 
 class NoticeHandler(BaseHandler):
 
+    @web.authenticated
     def get(self):
         msg = self.get_argument('msg',None)
         self.render('notice.html',msg=msg,page_title='公告 -XOJ',page_type='notice')

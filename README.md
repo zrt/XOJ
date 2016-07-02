@@ -1,7 +1,7 @@
 # XOJ
 Another Online Judge System.
 
-"This project for me to practice Python and HTML , it's with many bugs and bad code style now."
+"It's a project for me to practice Python and HTML . it has many bugs and bad code style now."
 
 Coding Now...
 

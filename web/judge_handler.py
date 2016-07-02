@@ -12,6 +12,7 @@ import time
 
 class StatusHandler(BaseHandler):
 
+    @web.authenticated
     @gen.coroutine
     def get(self):
         msg = self.get_argument('msg',None)
@@ -49,6 +50,7 @@ class StatusHandler(BaseHandler):
 
 class InfoHandler(BaseHandler):
 
+    @web.authenticated
     @gen.coroutine
     def get(self,judge_id):
         judge_id=int(judge_id)
@@ -63,7 +65,9 @@ class InfoHandler(BaseHandler):
         cur = conn.cursor()
 
         sql = "SELECT id,author,code,problem_id,problem_name,status,mem_use,tim_use,\
-        lang,code_len,submit_date,result FROM judge WHERE id = %s"
+        lang,code_len,submit_date,result,visible FROM judge WHERE id = %s"
+
+
         yield cur.execute(sql,(judge_id,))
         info = cur.fetchone()
         cur.close()
@@ -71,6 +75,15 @@ class InfoHandler(BaseHandler):
         if info == None :
             self.redirect_msg('/status','评测记录未找到')
             return
+        user = self.current_user
+        auth = self.auth()
+
+        if info[1].encode('utf-8') != self.current_user and auth < info[12]:
+            self.redirect_msg('/status','权限不足')
+            return
+        #if self.current_user != info[1].encode('utf-8') and self.current_user != 'zrt'.encode('utf-8') and self.current_user != 'sys'.encode('utf-8'):
+         #   self.redirect_msg('/status','权限不足')
+          #  return
         self.render('status_info.html',msg=msg,info=info,page_type='status',\
             page_title='评测记录 -XOJ')
 
@@ -120,7 +133,7 @@ class SubmitHandler(BaseHandler):
         cur.close()
         conn.close()
 
-
+    @web.authenticated
     @gen.coroutine
     def post(self,prob_id):
         prob_id=int(prob_id)
@@ -131,13 +144,19 @@ class SubmitHandler(BaseHandler):
         conn = yield tornado_mysql.connect(host=conf.DBHOST,\
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
-        sql = "SELECT id,name,spj_code,data,mem_limit,tim_limit FROM problems WHERE id = %s LIMIT 1"
+        sql = "SELECT id,name,spj_code,data,mem_limit,tim_limit,visible,author FROM problems WHERE id = %s LIMIT 1"
         yield cur.execute(sql,(prob_id,))
         problem = cur.fetchone()
         if problem == None :
             cur.close()
             conn.close()
             self.redirect_msg('/problems','题目编号错误')
+            return
+        user = self.current_user
+        auth = self.auth()
+
+        if problem[7].encode('utf-8') != self.current_user and auth < problem[6]:
+            self.redirect_msg('/problems','权限不足')
             return
         user = self.current_user
         lang = 1
@@ -159,15 +178,16 @@ class SubmitHandler(BaseHandler):
         self.redirect_msg('/status/%d'%judge_id,'提交成功')
         judger_callback = urljoin(conf.MYURL,'/judger-callback')
         judger_url=random.choice(conf.JUDGER)
-        judge_content=json.dumps({'id':judge_id,'code':code,\
+        judge_content=json.dumps({'id':judge_id,'prob_id':prob_id,'code':code,\
             'data':problem[3],'spj':problem[2],'lang':lang,\
             'mem_limit':problem[4],'tim_limit':problem[5],'callback':judger_callback,'tim':int(time.time())})
         body_content=urllib.parse.urlencode({'content':judge_content,'key':calc_md5(judge_content,conf.JUDGER_KEY)})
         url = judger_url+'?'+body_content
         http_client = httpclient.AsyncHTTPClient()
-        http_client.fetch(url,self.submit_callback)
         self.upd(user,problem[0])
+        http_client.fetch(url,self.submit_callback)
 
+    @web.authenticated
     @gen.coroutine
     def get(self,prob_id):
         prob_id=int(prob_id)
@@ -179,13 +199,19 @@ class SubmitHandler(BaseHandler):
         conn = yield tornado_mysql.connect(host=conf.DBHOST,\
             port=conf.DBPORT,user=conf.DBUSER,passwd=conf.DBPW,db=conf.DBNAME,charset='utf8')
         cur = conn.cursor()
-        sql = "SELECT id,tp,name FROM problems WHERE id = %s LIMIT 1"
+        sql = "SELECT id,tp,name,author,visible FROM problems WHERE id = %s LIMIT 1"
         yield cur.execute(sql,(prob_id,))
         problem = cur.fetchone()
         cur.close()
         conn.close()
         if problem == None :
             self.redirect_msg('/problems','题目编号错误')
+            return
+        user = self.current_user
+        auth = self.auth()
+
+        if problem[3].encode('utf-8') != self.current_user and auth < problem[4]:
+            self.redirect_msg('/status','权限不足')
             return
         self.render('submit.html',msg=msg,problem=problem,page_type='problem',\
             page_title='提交#'+str(problem[0])+'. '+problem[2]+' -XOJ')

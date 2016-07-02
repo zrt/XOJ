@@ -30,8 +30,13 @@
     <tbody>
         {% for row in records %}
         <tr>
-            <td>{{row[0]}}</td>
+            <td><a href="/status/{{row[0]}}">{{row[0]}}</a></td>
+            {% if row[1] < 0 %}
+            <td><a href="/contest/{{(-row[1])//100}}/{{(-row[1])%100}}">比赛#{{(-row[1])//100}}.T{{(-row[1])%100}} {{row[2]}}</a></td>
+            {% end %}
+            {% if row[1] > 0 %}
             <td><a href="/problem/{{row[1]}}">#{{row[1]}}. {{row[2]}}</a></td>
+            {% end %}
             <td><a href="/user/{{row[3]}}">{{row[3]}}</a></td>
             <td>
                 <a href="/status/{{row[0]}}">
@@ -67,8 +72,8 @@
                     {% end %}
                 </a>
             </td>
-            <td><a href="/status/{{row[0]}}">{{row[5]}}ms</a></td>
-            <td><a href="/status/{{row[0]}}">{{row[6]}}kb</a></td>
+            <td><a href="/status/{{row[0]}}">{{row[5]}}MS</a></td>
+            <td><a href="/status/{{row[0]}}">{{row[6]}}KB</a></td>
             <td>{{row[7]}}</td>
         </tr>
         {% end %}

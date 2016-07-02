@@ -21,9 +21,9 @@ class JudgeHandler(BaseHandler):
             self.set_status(200)
             self.finish()
         content = json.loads(content)
-        #{'id':,'code':,'data':,'spj':,'lang':,'mem_limit':,'tim_limit':,'callback':}
+        #{'id':,'prob_id','code':,'data':,'spj':,'lang':,'mem_limit':,'tim_limit':,'callback':}
 
-        # callback: id,status,mem_use,tim_use,result(ADD形式) & key
+        # callback: id,status,mem_use,tim_use,result(w+形式) & key
         tim_now=int(time.time())
         if content['tim'] > tim_now+20 or content['tim'] < tim_now-20:
             return
@@ -39,11 +39,11 @@ class JudgeHandler(BaseHandler):
         http_client.fetch(url)
 
 
-        r = yield gen.Task(tasks.prepare.apply_async,args=[content['id'],content['data'],content['spj']])
+        r = yield gen.Task(tasks.prepare.apply_async,args=[content['id'],content['prob_id'],content['data'],content['spj']])
         r = r.result
 
         if r[0] == 1:
-            callback['result'] = '####评测机准备完毕,开始编译程序...\n'+r[1]
+            callback['result'] = r[1]+'\n'+'####评测机准备完毕,开始编译程序...\n'
         else:
             callback['status'] = 9
             callback['result'] = '####评测机准备失败...\n'+r[1]
@@ -62,7 +62,7 @@ class JudgeHandler(BaseHandler):
         r = r.result
 
         if r[0] == 1:
-            callback['result'] = '####编译成功,开始评测...\n'+r[1]
+            callback['result'] = r[1]+'\n'+'####编译成功,开始评测...\n'
         else:
             callback['status'] = 8
             callback['result'] = '####编译失败...\n'+r[1]
@@ -77,7 +77,7 @@ class JudgeHandler(BaseHandler):
         if callback['status'] != 2:
             return
 
-        r = yield gen.Task(tasks.judge.apply_async,args=[content['id'],content['mem_limit'],content['tim_limit']])
+        r = yield gen.Task(tasks.judge.apply_async,args=[content['id'],content['mem_limit'],content['tim_limit'],content['data']])
         r = r.result
 
         callback['status'] = r[0]

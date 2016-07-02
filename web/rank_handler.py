@@ -7,6 +7,7 @@ import tornado_mysql
 
 class RankHandler(BaseHandler):
 
+    @web.authenticated
     @gen.coroutine
     def get(self):
         msg = self.get_argument('msg',None)
